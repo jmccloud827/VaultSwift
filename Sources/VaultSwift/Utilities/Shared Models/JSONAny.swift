@@ -48,9 +48,17 @@ public enum JSONAny: Codable, Sendable {
         } else if container.decodeNil() {
             self = .null
         } else {
-            throw DecodingError.dataCorrupted(
-                .init(codingPath: decoder.codingPath, debugDescription: "Unhandled type")
-            )
+            throw DecodingError.dataCorrupted(.init(codingPath: decoder.codingPath, debugDescription: "Unhandled type"))
         }
+    }
+    
+    public func convert<T: Decodable & Sendable>() throws -> T {
+        return try Self.convert(self)
+    }
+    
+    public static func convert<T: Decodable & Sendable>(_ encodable: any Encodable) throws -> T {
+        let jsonData = try JSONEncoder().encode(encodable)
+        
+        return try JSONDecoder().decode(T.self, from: jsonData)
     }
 }
