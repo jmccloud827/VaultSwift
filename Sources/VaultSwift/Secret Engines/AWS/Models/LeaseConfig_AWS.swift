@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.AWS {
+public extension Vault.SecretEngines.AWSClient {
     struct LeaseConfig: Codable, Sendable {
         public let lease: String?
         public let maximumLease: String?

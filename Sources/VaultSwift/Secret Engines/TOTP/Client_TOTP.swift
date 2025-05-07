@@ -1,8 +1,8 @@
 import Foundation
 
-public extension Vault.TOTP {
-    struct Client {
-        private let config: Config
+public extension Vault.SecretEngines {
+    struct TOTPClient: BackendClient {
+        public let config: Config
         private let client: Vault.Client
             
         public init(config: Config, vaultConfig: Vault.Config) {
@@ -73,11 +73,11 @@ public extension Vault.TOTP {
         }
         
         public struct Config {
-            let mount: String
-            let wrapTimeToLive: String?
+            public let mount: String
+            public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? SecretEngineType.totp.rawValue)
+                self.mount = "/" + (mount ?? MountType.totp.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
@@ -85,9 +85,7 @@ public extension Vault.TOTP {
 }
 
 public extension Vault {
-    enum TOTP {}
-    
-    func buildTOTPClient(config: TOTP.Client.Config) -> TOTP.Client {
+    func buildTOTPClient(config: SecretEngines.TOTPClient.Config) -> SecretEngines.TOTPClient {
         .init(config: config, client: client)
     }
 }

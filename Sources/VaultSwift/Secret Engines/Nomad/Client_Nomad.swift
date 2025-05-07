@@ -1,8 +1,8 @@
 import Foundation
 
-public extension Vault.Nomad {
-    struct Client {
-        private let config: Config
+public extension Vault.SecretEngines {
+    struct NomadClient: BackendClient {
+        public let config: Config
         private let client: Vault.Client
             
         public init(config: Config, vaultConfig: Vault.Config) {
@@ -23,11 +23,11 @@ public extension Vault.Nomad {
         }
         
         public struct Config {
-            let mount: String
-            let wrapTimeToLive: String?
+            public let mount: String
+            public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? SecretEngineType.nomad.rawValue)
+                self.mount = "/" + (mount ?? MountType.nomad.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
@@ -35,9 +35,7 @@ public extension Vault.Nomad {
 }
 
 public extension Vault {
-    enum Nomad {}
-    
-    func buildNomadClient(config: Nomad.Client.Config) -> Nomad.Client {
+    func buildNomadClient(config: SecretEngines.NomadClient.Config) -> SecretEngines.NomadClient {
         .init(config: config, client: client)
     }
 }

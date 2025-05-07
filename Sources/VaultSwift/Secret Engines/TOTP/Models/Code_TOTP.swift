@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.TOTP {
+public extension Vault.SecretEngines.TOTPClient {
     struct Code: Decodable, Sendable {
         public let code: String?
         

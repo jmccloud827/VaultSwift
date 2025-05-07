@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.PKI {
+public extension Vault.SecretEngines.PKIClient {
     struct SignCertificateOptions: Encodable, Sendable {
         public let commonName: String?
         public let subjectAlternativeNames: String?

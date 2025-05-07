@@ -1,11 +1,114 @@
 import Foundation
 
-protocol AuthProvider {
-    func getToken() async throws(VaultError) -> String
-}
-
 public extension Vault {
     enum AuthProviders {
+        protocol TokenProvider {
+            func getToken() async throws(VaultError) -> String
+        }
+        
+        public enum MethodType: Codable, Sendable {
+            case aliCloud
+            case appRole
+            case aws
+            case azure
+            case cloudFoundry
+            case googleCloud
+            case gitHub
+            case jwt
+            case kubernetes
+            case ldap
+            case oci
+            case okta
+            case radius
+            case token
+            case userCredentials
+            case custom(String)
+            
+            public var rawValue: String {
+                switch self {
+                case .aliCloud:
+                    "alicloud"
+                    
+                case .appRole:
+                    "approle"
+                    
+                case .aws:
+                    "aws"
+                    
+                case .azure:
+                    "azure"
+                    
+                case .cloudFoundry:
+                    "cf"
+                    
+                case .googleCloud:
+                    "gcp"
+                    
+                case .gitHub:
+                    "github"
+                    
+                case .jwt:
+                    "jwt"
+                    
+                case .kubernetes:
+                    "kubernetes"
+                    
+                case .ldap:
+                    "ldap"
+                    
+                case .oci:
+                    "oci"
+                    
+                case .okta:
+                    "okta"
+                    
+                case .radius:
+                    "radius"
+                    
+                case .token:
+                    "token"
+                    
+                case .userCredentials:
+                    "userpass"
+                    
+                case let .custom(value):
+                    value
+                }
+            }
+            
+            static let allCases: [Self] = [
+                .aliCloud,
+                .appRole,
+                .aws,
+                .azure,
+                .cloudFoundry,
+                .googleCloud,
+                .gitHub,
+                .jwt,
+                .kubernetes,
+                .ldap,
+                .oci,
+                .okta,
+                .radius,
+                .token,
+                .userCredentials
+            ]
+            
+            public init(from decoder: any Decoder) throws {
+                let type = try decoder.singleValueContainer().decode(String.self)
+                self = Self.allCases.first(where: { $0.rawValue == type }) ?? .custom(type)
+            }
+            
+            public func encode(to encoder: any Encoder) throws {
+                var container = encoder.singleValueContainer()
+                try container.encode(rawValue)
+            }
+        }
+    }
+}
+
+public extension Vault.AuthProviders {
+    enum TokenProviders {
         case aliCloud(request: AliCloudAuthRequest, mount: String? = nil)
         case appRole(roleID: String, secretID: String?, mount: String? = nil)
         case aws(role: String, nonce: String, type: AWSAuthMethodType, mount: String? = nil)
@@ -25,55 +128,55 @@ public extension Vault {
         
         // Currently not supported: Certificate, Kerberos
         
-        func asAuthProvider(client: Client) -> AuthProvider {
+        func asTokenProvider(client: Vault.Client) -> TokenProvider {
             switch self {
             case let .aliCloud(request, mount):
-                AliCloudAuthProvider(request: request, mount: mount, client: client)
+                AliCloudTokenProvider(request: request, mount: mount, client: client)
                 
             case let .appRole(roleID, secretID, mount):
-                AppRoleAuthProvider(roleID: roleID, secretID: secretID, mount: mount, client: client)
+                AppRoleTokenProvider(roleID: roleID, secretID: secretID, mount: mount, client: client)
                 
             case let .aws(role, nonce, type, mount):
-                AWSAuthProvider(role: role, nonce: nonce, type: type, mount: mount, client: client)
+                AWSTokenProvider(role: role, nonce: nonce, type: type, mount: mount, client: client)
                 
             case let .azure(request, mount):
-                AzureAuthProvider(request: request, mount: mount, client: client)
+                AzureTokenProvider(request: request, mount: mount, client: client)
                 
             case let .cloudFoundry(request: request, mount: mount):
-                CloudFoundryAuthProvider(request: request, mount: mount, client: client)
+                CloudFoundryTokenProvider(request: request, mount: mount, client: client)
                 
             case let .custom(getToken: getToken):
-                CustomAuthProvider(getToken: getToken)
+                CustomTokenProvider(getToken: getToken)
                 
             case let .googleCloud(request, mount):
-                GoogleCloudAuthProvider(request: request, mount: mount, client: client)
+                GoogleCloudTokenProvider(request: request, mount: mount, client: client)
                 
             case let .gitHub(personalAccessToken, mount):
-                GitHubAuthProvider(personalAccessToken: personalAccessToken, mount: mount, client: client)
+                GitHubTokenProvider(personalAccessToken: personalAccessToken, mount: mount, client: client)
                 
             case let .jwt(role, jwt, mount):
-                JWTAuthProvider(role: role, jwt: jwt, mount: mount, client: client)
+                JWTTokenProvider(role: role, jwt: jwt, mount: mount, client: client)
                 
             case let .kubernetes(role, jwt, mount):
-                KubernetesAuthProvider(role: role, jwt: jwt, mount: mount, client: client)
+                KubernetesTokenProvider(role: role, jwt: jwt, mount: mount, client: client)
                 
             case let .ldap(username, password, mount):
-                LDAPAuthProvider(username: username, password: password, mount: mount, client: client)
+                LDAPTokenProvider(username: username, password: password, mount: mount, client: client)
                 
             case let .oci(role, headers, mount):
-                OCIAuthProvider(role: role, headers: headers, mount: mount, client: client)
+                OCITokenProvider(role: role, headers: headers, mount: mount, client: client)
                 
             case let .okta(request, mount):
-                OktaAuthProvider(request: request, mount: mount, client: client)
+                OktaTokenProvider(request: request, mount: mount, client: client)
                 
             case let .radius(username, password, mount):
-                RADIUSAuthProvider(username: username, password: password, mount: mount, client: client)
+                RADIUSTokenProvider(username: username, password: password, mount: mount, client: client)
                 
             case let .token(token):
-                TokenAuthProvider(token: token)
+                TokenTokenProvider(token: token)
                 
             case let .userCredentials(username, password, mount):
-                UserCredentialsAuthProvider(username: username, password: password, mount: mount, client: client)
+                UserCredentialsTokenProvider(username: username, password: password, mount: mount, client: client)
             }
         }
     }

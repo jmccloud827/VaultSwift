@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.AWS {
+public extension Vault.SecretEngines.AWSClient {
     struct Credentials: Decodable, Sendable {
         public let accessKey: String
         public let secretKey: String

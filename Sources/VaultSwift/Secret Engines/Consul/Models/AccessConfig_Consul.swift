@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Consul {
+public extension Vault.SecretEngines.ConsulClient {
     struct AccessConfig: Encodable, Sendable {
         public let consulAddressWithPort: String?
         public let urlScheme: String?

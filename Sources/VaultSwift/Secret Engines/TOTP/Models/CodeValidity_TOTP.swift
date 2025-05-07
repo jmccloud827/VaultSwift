@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.TOTP {
+public extension Vault.SecretEngines.TOTPClient {
     struct CodeValidity: Decodable, Sendable {
         public let isValid: Bool
         

@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Transit {
+public extension Vault.SecretEngines.TransitClient {
     enum KeyType: String, Codable, Sendable {
         case aes256_gcm96 = "aes256-gcm96"
         case ecdsa_p256 = "ecdsa-p256"

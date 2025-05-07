@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Identity {
+public extension Vault.SecretEngines.IdentityClient {
     struct KeyRequest: Encodable, Sendable {
         public let rotationPeriod: String?
         public let verificationTimeToLive: String?

@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.GoogleCloudKMS {
+public extension Vault.SecretEngines.GoogleCloudKMSClient {
     struct EncryptRequest: Encodable, Sendable {
         public let keyVersion: Int?
         public let plainText: String?

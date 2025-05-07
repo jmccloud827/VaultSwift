@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Transit {
+public extension Vault.SecretEngines.TransitClient {
     struct EncryptionKeyConfig: Encodable, Sendable {
         public let deletionAllowed: Bool?
         public let exportable: Bool?

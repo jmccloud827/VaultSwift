@@ -1,8 +1,8 @@
 import Foundation
 
-public extension Vault.AliCloud {
-    struct Client {
-        private let config: Config
+public extension Vault.SecretEngines {
+    struct AliCloudClient: BackendClient {
+        public let config: Config
         private let client: Vault.Client
             
         public init(config: Config, vaultConfig: Vault.Config) {
@@ -59,11 +59,11 @@ public extension Vault.AliCloud {
         }
             
         public struct Config {
-            let mount: String
-            let wrapTimeToLive: String?
+            public let mount: String
+            public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? SecretEngineType.aliCloud.rawValue)
+                self.mount = "/" + (mount ?? MountType.aliCloud.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
@@ -71,9 +71,7 @@ public extension Vault.AliCloud {
 }
 
 public extension Vault {
-    enum AliCloud {}
-    
-    func buildAliCloudClient(config: AliCloud.Client.Config) -> AliCloud.Client {
+    func buildAliCloudClient(config: SecretEngines.AliCloudClient.Config) -> SecretEngines.AliCloudClient {
         .init(config: config, client: client)
     }
 }

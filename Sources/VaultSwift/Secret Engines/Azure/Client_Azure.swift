@@ -1,8 +1,8 @@
 import Foundation
 
-public extension Vault.Azure {
-    struct Client {
-        private let config: Config
+public extension Vault.SecretEngines {
+    struct AzureClient: BackendClient {
+        public let config: Config
         private let client: Vault.Client
             
         public init(config: Config, vaultConfig: Vault.Config) {
@@ -23,11 +23,11 @@ public extension Vault.Azure {
         }
             
         public struct Config {
-            let mount: String
-            let wrapTimeToLive: String?
+            public let mount: String
+            public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? SecretEngineType.azure.rawValue)
+                self.mount = "/" + (mount ?? MountType.azure.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
@@ -35,9 +35,7 @@ public extension Vault.Azure {
 }
 
 public extension Vault {
-    enum Azure {}
-    
-    func buildAzureClient(config: Azure.Client.Config) -> Azure.Client {
+    func buildAzureClient(config: SecretEngines.AzureClient.Config) -> SecretEngines.AzureClient {
         .init(config: config, client: client)
     }
 }

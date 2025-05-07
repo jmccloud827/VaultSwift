@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Identity {
+public extension Vault.SecretEngines.IdentityClient {
     struct MergeEntitiesRequest: Encodable, Sendable {
         public let fromEntityIds: [String]
         public let toEntityId: String

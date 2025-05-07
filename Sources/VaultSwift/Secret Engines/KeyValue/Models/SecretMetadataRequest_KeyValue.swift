@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.KeyValue {
+public extension Vault.SecretEngines.KeyValueClient {
     struct SecretMetadataRequest: Encodable {
         public let maxVersion: Int?
         public let isCheckAndSetRequired: Bool?

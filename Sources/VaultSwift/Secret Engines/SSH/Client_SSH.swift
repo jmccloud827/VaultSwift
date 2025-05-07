@@ -1,8 +1,8 @@
 import Foundation
 
-public extension Vault.SSH {
-    struct Client {
-        private let config: Config
+public extension Vault.SecretEngines {
+    struct SSHClient: BackendClient {
+        public let config: Config
         private let client: Vault.Client
             
         public init(config: Config, vaultConfig: Vault.Config) {
@@ -40,11 +40,11 @@ public extension Vault.SSH {
         }
         
         public struct Config {
-            let mount: String
-            let wrapTimeToLive: String?
+            public let mount: String
+            public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? SecretEngineType.ssh.rawValue)
+                self.mount = "/" + (mount ?? MountType.ssh.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
@@ -52,9 +52,7 @@ public extension Vault.SSH {
 }
 
 public extension Vault {
-    enum SSH {}
-    
-    func buildSSHClient(config: SSH.Client.Config) -> SSH.Client {
+    func buildSSHClient(config: SecretEngines.SSHClient.Config) -> SecretEngines.SSHClient {
         .init(config: config, client: client)
     }
 }

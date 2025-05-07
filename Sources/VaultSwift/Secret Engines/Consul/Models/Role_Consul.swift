@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Consul {
+public extension Vault.SecretEngines.ConsulClient {
     struct Role: Codable, Sendable {
         public let consulNamespace: String?
         public let base64EncodedACLConsulPolicies: [String]?

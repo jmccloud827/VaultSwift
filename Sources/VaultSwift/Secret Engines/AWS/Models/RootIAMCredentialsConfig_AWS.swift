@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.AWS {
+public extension Vault.SecretEngines.AWSClient {
     struct RootIAMCredentialsConfig: Codable, Sendable {
         public let maxRetries: Int?
         public let accessKey: String?

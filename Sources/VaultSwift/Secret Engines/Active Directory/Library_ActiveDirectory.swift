@@ -1,8 +1,8 @@
 import Foundation
 
-public extension Vault.ActiveDirectory {
-    struct Library {
-        private let config: Config
+public extension Vault.SecretEngines {
+    struct ActiveDirectoryLibrary: BackendClient {
+        public let config: Config
         private let client: Vault.Client
             
         public init(config: Config, vaultConfig: Vault.Config) {
@@ -61,11 +61,11 @@ public extension Vault.ActiveDirectory {
         }
             
         public struct Config {
-            let mount: String
-            let wrapTimeToLive: String?
+            public let mount: String
+            public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? SecretEngineType.activeDirectory.rawValue)
+                self.mount = "/" + (mount ?? MountType.activeDirectory.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
@@ -73,7 +73,7 @@ public extension Vault.ActiveDirectory {
 }
 
 public extension Vault {
-    func buildActiveDirectoryLibrary(config: ActiveDirectory.Library.Config) -> ActiveDirectory.Library {
+    func buildActiveDirectoryLibrary(config: SecretEngines.ActiveDirectoryLibrary.Config) -> SecretEngines.ActiveDirectoryLibrary {
         .init(config: config, client: client)
     }
 }

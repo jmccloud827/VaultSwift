@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.KMIP {
+public extension Vault.SecretEngines.KMIPClient {
     struct Credentials: Decodable, Sendable {
         public let caChainContent: [String]?
         public let certificateContent: String?

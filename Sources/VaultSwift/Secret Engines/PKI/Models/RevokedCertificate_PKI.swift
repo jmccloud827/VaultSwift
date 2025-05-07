@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.PKI {
+public extension Vault.SecretEngines.PKIClient {
     struct RevokedCertificate: Decodable, Sendable {
         public let revocationTime: Int?
         public let revocationTimeRFC3339: Date?

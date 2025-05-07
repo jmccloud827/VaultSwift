@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.ActiveDirectory {
+public extension Vault.SecretEngines.ActiveDirectoryClient {
     struct ConnectionConfig: Codable, Sendable {
         public let bindingDistinguishedName: String?
         public let x509PEMEncodedCertificate: String?

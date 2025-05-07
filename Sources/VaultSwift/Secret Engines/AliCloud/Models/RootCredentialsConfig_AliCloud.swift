@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.AliCloud {
+public extension Vault.SecretEngines.AliCloudClient {
     struct RootCredentialsConfig: Codable, Sendable {
         public let accessKey: String
         public let secretKey: String?

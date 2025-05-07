@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.KeyValue {
+public extension Vault.SecretEngines.KeyValueClient {
     struct Secret<T: Decodable & Sendable>: Decodable, Sendable {
         public let data: T
         public let metadata: Metadata

@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.RabbitMQ {
+public extension Vault.SecretEngines.RabbitMQClient {
     struct Role: Codable, Sendable {
         public let tags: String?
         public let vHosts: String?

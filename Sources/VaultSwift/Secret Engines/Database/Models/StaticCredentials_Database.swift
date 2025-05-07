@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Database {
+public extension Vault.SecretEngines.DatabaseClient {
     struct StaticCredentials: Decodable, Sendable {
         public let lastVaultRotation: String
         public let rotationPeriod: Int

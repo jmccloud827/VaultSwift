@@ -1,9 +1,9 @@
 import Foundation
 
-public extension Vault.Transit {
+public extension Vault.SecretEngines.TransitClient {
     struct ImportKeyOptions: Encodable, Sendable {
         public let base64EncodedCipherText: Bool?
-        public let hashType: HashType?
+        public let hashType: HashFunctionType?
         public let type: KeyType?
         public let allowRotation: Bool?
         public let derived: Bool?
@@ -13,7 +13,7 @@ public extension Vault.Transit {
         public let autoRotatePeriod: Int?
         
         public init(base64EncodedCipherText: Bool?,
-                    hashType: HashType?,
+                    hashType: HashFunctionType?,
                     type: KeyType?,
                     allowRotation: Bool?,
                     derived: Bool?,

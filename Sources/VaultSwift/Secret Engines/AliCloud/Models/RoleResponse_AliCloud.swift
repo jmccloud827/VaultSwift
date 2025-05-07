@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.AliCloud {
+public extension Vault.SecretEngines.AliCloudClient {
     struct RoleResponse: Decodable, Sendable {
         public let remotePoliciesJson: String?
         public let inlinePoliciesJson: String?

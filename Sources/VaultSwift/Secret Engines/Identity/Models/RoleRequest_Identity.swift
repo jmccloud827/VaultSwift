@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Identity {
+public extension Vault.SecretEngines.IdentityClient {
     struct RoleRequest: Encodable, Sendable {
         public let key: String?
         public let template: String?

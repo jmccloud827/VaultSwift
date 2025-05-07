@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.GoogleCloudKMS {
+public extension Vault.SecretEngines.GoogleCloudKMSClient {
     struct VerifyResponse: Decodable, Sendable {
         public let valid: Bool
         

@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Identity {
+public extension Vault.SecretEngines.IdentityClient {
     struct CreateEntityResponse: Decodable, Sendable {
         public let id: String?
         public let name: String?

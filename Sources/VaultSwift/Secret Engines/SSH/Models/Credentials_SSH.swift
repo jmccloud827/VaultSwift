@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.SSH {
+public extension Vault.SecretEngines.SSHClient {
     struct Credentials: Decodable, Sendable {
         public let ipAddress: String?
         public let key: String?

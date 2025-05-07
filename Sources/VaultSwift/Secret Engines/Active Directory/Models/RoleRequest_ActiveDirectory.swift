@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.ActiveDirectory {
+public extension Vault.SecretEngines.ActiveDirectoryClient {
     struct RoleRequest: Encodable, Sendable {
         public let serviceAccountName: String
         public let timeToLive: Int

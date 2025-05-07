@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.OpenLDAP {
+public extension Vault.SecretEngines.OpenLDAPClient {
     struct StaticRole: Codable, Sendable {
         public let username: String?
         public let distinguishedName: String?

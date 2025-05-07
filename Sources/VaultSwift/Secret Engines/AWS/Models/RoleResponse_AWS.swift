@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.AWS {
+public extension Vault.SecretEngines.AWSClient {
     struct RoleResponse: Decodable, Sendable {
         public let roleARNs: [String]?
         public let policyARNs: [String]?

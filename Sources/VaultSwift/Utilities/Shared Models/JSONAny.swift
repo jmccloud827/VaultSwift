@@ -52,13 +52,21 @@ public enum JSONAny: Codable, Sendable {
         }
     }
     
-    public func convert<T: Decodable & Sendable>() throws -> T {
-        return try Self.convert(self)
+    public func toObject<T: Decodable & Sendable>() throws -> T {
+        return try self.fromJSONAny()
     }
-    
-    public static func convert<T: Decodable & Sendable>(_ encodable: any Encodable) throws -> T {
-        let jsonData = try JSONEncoder().encode(encodable)
+}
+
+public extension Encodable {
+    func fromJSONAny<T: Decodable & Sendable>() throws -> T {
+        let jsonData = try JSONEncoder().encode(self)
         
         return try JSONDecoder().decode(T.self, from: jsonData)
+    }
+    
+    func toJSONAny() throws -> JSONAny {
+        let jsonData = try JSONEncoder().encode(self)
+        
+        return try JSONDecoder().decode(JSONAny.self, from: jsonData)
     }
 }

@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Transform {
+public extension Vault.SecretEngines.TransformClient {
     struct CodingOptions: Encodable, Sendable {
         public let batchItems: [Item]
         

@@ -1,8 +1,8 @@
 import Foundation
 
-public extension Vault.Cubbyhole {
-    struct Client {
-        private let config: Config
+public extension Vault.SecretEngines {
+    struct CubbyholeClient: BackendClient {
+        public let config: Config
         private let client: Vault.Client
             
         public init(config: Config, vaultConfig: Vault.Config) {
@@ -43,11 +43,11 @@ public extension Vault.Cubbyhole {
         }
         
         public struct Config {
-            let mount: String
-            let wrapTimeToLive: String?
+            public let mount: String
+            public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? SecretEngineType.cubbyhole.rawValue)
+                self.mount = "/" + (mount ?? MountType.cubbyhole.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
@@ -55,9 +55,7 @@ public extension Vault.Cubbyhole {
 }
 
 public extension Vault {
-    enum Cubbyhole {}
-    
-    func buildCubbyholeClient(config: Cubbyhole.Client.Config) -> Cubbyhole.Client {
+    func buildCubbyholeClient(config: SecretEngines.CubbyholeClient.Config) -> SecretEngines.CubbyholeClient {
         .init(config: config, client: client)
     }
 }

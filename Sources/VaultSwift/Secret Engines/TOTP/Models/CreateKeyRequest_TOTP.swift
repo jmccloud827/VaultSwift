@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.TOTP {
+public extension Vault.SecretEngines.TOTPClient {
     struct CreateKeyRequest: Encodable, Sendable {
         public let url: String?
         public let key: String?

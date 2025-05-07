@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.ActiveDirectory {
+public extension Vault.SecretEngines.ActiveDirectoryClient {
     struct RoleResponse: Decodable, Sendable {
         public let lastVaultRotation: Date?
         public let passwordLastSet: Date?

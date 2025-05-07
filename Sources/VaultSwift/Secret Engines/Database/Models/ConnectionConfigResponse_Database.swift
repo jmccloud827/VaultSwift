@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Database {
+public extension Vault.SecretEngines.DatabaseClient {
     struct ConnectionConfigResponse: Decodable, Sendable {
         public let pluginName: String?
         public let pluginVersion: String?

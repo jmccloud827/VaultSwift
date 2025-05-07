@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.KeyManagement {
+public extension Vault.SecretEngines.KeyManagementClient {
     struct Key: Decodable, Sendable {
         public let deletionAllowed: Bool?
         public let keys: [String: [String: JSONAny]]?

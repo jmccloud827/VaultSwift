@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.OpenLDAP {
+public extension Vault.SecretEngines.OpenLDAPClient {
     struct DynamicRole: Codable, Sendable {
         public let creationLDIF: String?
         public let deletionLDIF: String?

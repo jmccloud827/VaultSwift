@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.PKI {
+public extension Vault.SecretEngines.PKIClient {
     enum CertificateFormat: String, Encodable, Sendable {
         case empty
         case der

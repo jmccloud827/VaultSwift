@@ -1,8 +1,8 @@
 import Foundation
 
-public extension Vault.Terraform {
-    struct Client {
-        private let config: Config
+public extension Vault.SecretEngines {
+    struct TerraformClient: BackendClient {
+        public let config: Config
         private let client: Vault.Client
             
         public init(config: Config, vaultConfig: Vault.Config) {
@@ -23,11 +23,11 @@ public extension Vault.Terraform {
         }
         
         public struct Config {
-            let mount: String
-            let wrapTimeToLive: String?
+            public let mount: String
+            public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? SecretEngineType.terraform.rawValue)
+                self.mount = "/" + (mount ?? MountType.terraform.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
@@ -35,9 +35,7 @@ public extension Vault.Terraform {
 }
 
 public extension Vault {
-    enum Terraform {}
-    
-    func buildTerraformClient(config: Terraform.Client.Config) -> Terraform.Client {
+    func buildTerraformClient(config: SecretEngines.TerraformClient.Config) -> SecretEngines.TerraformClient {
         .init(config: config, client: client)
     }
 }

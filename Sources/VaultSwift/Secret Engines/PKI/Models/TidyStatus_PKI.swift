@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.PKI {
+public extension Vault.SecretEngines.PKIClient {
     struct TidyStatus: Decodable, Sendable {
         let safetyBuffer: String?
         let tidyCertStore: Bool?

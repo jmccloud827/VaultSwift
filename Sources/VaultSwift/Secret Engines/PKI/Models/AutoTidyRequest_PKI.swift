@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.PKI {
+public extension Vault.SecretEngines.PKIClient {
     struct AutoTidyRequest: Encodable, Sendable {
         public let enabled: Bool
         public let intervalDuration: String

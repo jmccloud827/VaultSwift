@@ -1,8 +1,8 @@
 import Foundation
 
-public extension Vault.Consul {
-    struct Client {
-        private let config: Config
+public extension Vault.SecretEngines {
+    struct ConsulClient: BackendClient {
+        public let config: Config
         private let client: Vault.Client
             
         public init(config: Config, vaultConfig: Vault.Config) {
@@ -55,11 +55,11 @@ public extension Vault.Consul {
         }
             
         public struct Config {
-            let mount: String
-            let wrapTimeToLive: String?
+            public let mount: String
+            public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? SecretEngineType.consul.rawValue)
+                self.mount = "/" + (mount ?? MountType.consul.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
@@ -67,9 +67,7 @@ public extension Vault.Consul {
 }
 
 public extension Vault {
-    enum Consul {}
-    
-    func buildConsulClient(config: Consul.Client.Config) -> Consul.Client {
+    func buildConsulClient(config: SecretEngines.ConsulClient.Config) -> SecretEngines.ConsulClient {
         .init(config: config, client: client)
     }
 }

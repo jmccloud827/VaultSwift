@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Kubernetes {
+public extension Vault.SecretEngines.KubernetesClient {
     struct CredentialsResponse: Decodable, Sendable {
         public let serviceAccountName: String
         public let serviceAccountNamespace: String?

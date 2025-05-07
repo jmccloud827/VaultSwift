@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.KeyValue {
+public extension Vault.SecretEngines.KeyValueClient {
     struct Metadata: Decodable, Sendable {
         public let createdTime: Date
         public let customMetadata: [String: String]?

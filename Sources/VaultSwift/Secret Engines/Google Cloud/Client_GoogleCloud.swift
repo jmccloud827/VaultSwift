@@ -1,8 +1,8 @@
 import Foundation
 
-public extension Vault.GoogleCloud {
-    struct Client {
-        private let config: Config
+public extension Vault.SecretEngines {
+    struct GoogleCloudClient: BackendClient {
+        public let config: Config
         private let client: Vault.Client
             
         public init(config: Config, vaultConfig: Vault.Config) {
@@ -40,11 +40,11 @@ public extension Vault.GoogleCloud {
         }
             
         public struct Config {
-            let mount: String
-            let wrapTimeToLive: String?
+            public let mount: String
+            public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? SecretEngineType.googleCloud.rawValue)
+                self.mount = "/" + (mount ?? MountType.googleCloud.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
@@ -52,9 +52,7 @@ public extension Vault.GoogleCloud {
 }
 
 public extension Vault {
-    enum GoogleCloud {}
-    
-    func buildGoogleCloudClient(config: GoogleCloud.Client.Config) -> GoogleCloud.Client {
+    func buildGoogleCloudClient(config: SecretEngines.GoogleCloudClient.Config) -> SecretEngines.GoogleCloudClient {
         .init(config: config, client: client)
     }
 }

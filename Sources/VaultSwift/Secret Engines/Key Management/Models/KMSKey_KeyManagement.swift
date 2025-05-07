@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.KeyManagement {
+public extension Vault.SecretEngines.KeyManagementClient {
     struct KMSKey: Decodable, Sendable {
         public let name: String?
         public let protection: String?

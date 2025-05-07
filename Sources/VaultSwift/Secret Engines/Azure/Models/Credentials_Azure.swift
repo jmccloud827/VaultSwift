@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Azure {
+public extension Vault.SecretEngines.AzureClient {
     struct Credentials: Decodable, Sendable {
         public let clientID: String
         public let clientSecret: String

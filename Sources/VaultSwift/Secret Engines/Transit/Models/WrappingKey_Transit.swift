@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Transit {
+public extension Vault.SecretEngines.TransitClient {
     struct WrappingKey: Decodable, Sendable {
         public let publicKey: String?
         

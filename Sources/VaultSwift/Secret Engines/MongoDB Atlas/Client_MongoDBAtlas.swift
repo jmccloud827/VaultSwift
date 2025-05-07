@@ -1,8 +1,8 @@
 import Foundation
 
-public extension Vault.MongoDBAtlas {
-    struct Client {
-        private let config: Config
+public extension Vault.SecretEngines {
+    struct MongoDBAtlasClient: BackendClient {
+        public let config: Config
         private let client: Vault.Client
             
         public init(config: Config, vaultConfig: Vault.Config) {
@@ -23,11 +23,11 @@ public extension Vault.MongoDBAtlas {
         }
             
         public struct Config {
-            let mount: String
-            let wrapTimeToLive: String?
+            public let mount: String
+            public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? SecretEngineType.mongoDBAtlas.rawValue)
+                self.mount = "/" + (mount ?? MountType.mongoDBAtlas.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
@@ -35,9 +35,7 @@ public extension Vault.MongoDBAtlas {
 }
 
 public extension Vault {
-    enum MongoDBAtlas {}
-    
-    func buildMongoDBAtlasClient(config: MongoDBAtlas.Client.Config) -> MongoDBAtlas.Client {
+    func buildMongoDBAtlasClient(config: SecretEngines.MongoDBAtlasClient.Config) -> SecretEngines.MongoDBAtlasClient {
         .init(config: config, client: client)
     }
 }

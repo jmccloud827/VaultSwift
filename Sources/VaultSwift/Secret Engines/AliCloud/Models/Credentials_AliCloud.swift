@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.AliCloud {
+public extension Vault.SecretEngines.AliCloudClient {
     struct Credentials: Decodable, Sendable {
         public let accessKey: String
         public let expiration: Date

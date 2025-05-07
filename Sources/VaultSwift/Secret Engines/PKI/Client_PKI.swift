@@ -1,8 +1,8 @@
 import Foundation
 
-public extension Vault.PKI {
-    struct Client {
-        private let config: Config
+public extension Vault.SecretEngines {
+    struct PKIClient: BackendClient {
+        public let config: Config
         private let client: Vault.Client
             
         public init(config: Config, vaultConfig: Vault.Config) {
@@ -73,11 +73,11 @@ public extension Vault.PKI {
         }
         
         public struct Config {
-            let mount: String
-            let wrapTimeToLive: String?
+            public let mount: String
+            public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? SecretEngineType.pki.rawValue)
+                self.mount = "/" + (mount ?? MountType.pki.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
@@ -85,9 +85,7 @@ public extension Vault.PKI {
 }
 
 public extension Vault {
-    enum PKI {}
-    
-    func buildPKIClient(config: PKI.Client.Config) -> PKI.Client {
+    func buildPKIClient(config: SecretEngines.PKIClient.Config) -> SecretEngines.PKIClient {
         .init(config: config, client: client)
     }
 }

@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Transit {
+public extension Vault.SecretEngines.TransitClient {
     struct CreateKeyOptions: Encodable, Sendable {
         public let convergentEncryption: Bool?
         public let derived: Bool?

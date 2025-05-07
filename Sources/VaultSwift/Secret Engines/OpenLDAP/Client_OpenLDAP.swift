@@ -1,8 +1,8 @@
 import Foundation
 
-public extension Vault.OpenLDAP {
-    struct Client {
-        private let config: Config
+public extension Vault.SecretEngines {
+    struct OpenLDAPClient: BackendClient {
+        public let config: Config
         private let client: Vault.Client
             
         public init(config: Config, vaultConfig: Vault.Config) {
@@ -95,11 +95,11 @@ public extension Vault.OpenLDAP {
         }
         
         public struct Config {
-            let mount: String
-            let wrapTimeToLive: String?
+            public let mount: String
+            public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? SecretEngineType.openLDAP.rawValue)
+                self.mount = "/" + (mount ?? MountType.openLDAP.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
@@ -107,9 +107,7 @@ public extension Vault.OpenLDAP {
 }
 
 public extension Vault {
-    enum OpenLDAP {}
-    
-    func buildOpenLDAPClient(config: OpenLDAP.Client.Config) -> OpenLDAP.Client {
+    func buildOpenLDAPClient(config: SecretEngines.OpenLDAPClient.Config) -> SecretEngines.OpenLDAPClient {
         .init(config: config, client: client)
     }
 }

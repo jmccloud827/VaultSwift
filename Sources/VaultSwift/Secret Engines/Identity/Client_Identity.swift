@@ -1,8 +1,8 @@
 import Foundation
 
-public extension Vault.Identity {
-    struct Client {
-        private let config: Config
+public extension Vault.SecretEngines {
+    struct IdentityClient: BackendClient {
+        public let config: Config
         private let client: Vault.Client
             
         public init(config: Config, vaultConfig: Vault.Config) {
@@ -146,11 +146,11 @@ public extension Vault.Identity {
         }
             
         public struct Config {
-            let mount: String
-            let wrapTimeToLive: String?
+            public let mount: String
+            public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? SecretEngineType.identity.rawValue)
+                self.mount = "/" + (mount ?? MountType.identity.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
@@ -158,9 +158,7 @@ public extension Vault.Identity {
 }
 
 public extension Vault {
-    enum Identity {}
-    
-    func buildIdentityClient(config: Identity.Client.Config) -> Identity.Client {
+    func buildIdentityClient(config: SecretEngines.IdentityClient.Config) -> SecretEngines.IdentityClient {
         .init(config: config, client: client)
     }
 }

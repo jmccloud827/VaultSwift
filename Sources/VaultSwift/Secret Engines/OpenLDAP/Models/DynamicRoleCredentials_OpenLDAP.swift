@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.OpenLDAP {
+public extension Vault.SecretEngines.OpenLDAPClient {
     struct DynamicRoleCredentials: Decodable, Sendable {
         public let username: String?
         public let password: String?

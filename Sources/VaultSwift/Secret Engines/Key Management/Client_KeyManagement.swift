@@ -1,8 +1,8 @@
 import Foundation
 
-public extension Vault.KeyManagement {
-    struct Client {
-        private let config: Config
+public extension Vault.SecretEngines {
+    struct KeyManagementClient: BackendClient {
+        public let config: Config
         private let client: Vault.Client
             
         public init(config: Config, vaultConfig: Vault.Config) {
@@ -35,11 +35,11 @@ public extension Vault.KeyManagement {
         }
             
         public struct Config {
-            let mount: String
-            let wrapTimeToLive: String?
+            public let mount: String
+            public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? SecretEngineType.keyManagement.rawValue)
+                self.mount = "/" + (mount ?? MountType.keyManagement.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
@@ -47,9 +47,7 @@ public extension Vault.KeyManagement {
 }
 
 public extension Vault {
-    enum KeyManagement {}
-    
-    func buildKeyManagementClient(config: KeyManagement.Client.Config) -> KeyManagement.Client {
+    func buildKeyManagementClient(config: SecretEngines.KeyManagementClient.Config) -> SecretEngines.KeyManagementClient {
         .init(config: config, client: client)
     }
 }

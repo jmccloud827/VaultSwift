@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.ActiveDirectory {
+public extension Vault.SecretEngines.ActiveDirectoryClient {
     struct Credentials: Decodable, Sendable {
         public let currentPassword: String
         public let lastPassword: String

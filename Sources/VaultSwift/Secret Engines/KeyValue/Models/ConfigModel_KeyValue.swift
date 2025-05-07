@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.KeyValue {
+public extension Vault.SecretEngines.KeyValueClient {
     struct ConfigModel: Codable, Sendable {
         public let isCheckAndSetRequired: Bool
         public let deleteVersionAfter: String

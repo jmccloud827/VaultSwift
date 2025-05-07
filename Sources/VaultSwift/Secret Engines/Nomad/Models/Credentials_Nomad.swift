@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Nomad {
+public extension Vault.SecretEngines.NomadClient {
     struct Credentials: Decodable, Sendable {
         public let accessorID: String?
         public let secretID: String?

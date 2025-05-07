@@ -2,7 +2,7 @@ import Foundation
 
 public extension Vault.SystemBackend {
     struct SecretEngine: Codable, Sendable {
-        public let type: Vault.SecretEngineType
+        public let type: Vault.SecretEngines.MountType
         public let id: String?
         public let accessor: String?
         public let config: [String: JSONAny]?
@@ -17,7 +17,7 @@ public extension Vault.SystemBackend {
         public let runningSHA256: String?
         public let sealWrap: Bool?
         
-        public init(type: Vault.SecretEngineType,
+        public init(type: Vault.SecretEngines.MountType,
                     id: String?,
                     accessor: String?,
                     config: [String: JSONAny]?,

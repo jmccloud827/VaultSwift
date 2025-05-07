@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.GoogleCloud {
+public extension Vault.SecretEngines.GoogleCloudClient {
     struct ServiceAccountKey: Decodable, Sendable {
         public let base64EncodedPrivateKeyData: String
         public let keyAlgorithm: AlgorithmType

@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Identity {
+public extension Vault.SecretEngines.IdentityClient {
     struct Token: Decodable, Sendable {
         public let clientID: String?
         public let token: String?

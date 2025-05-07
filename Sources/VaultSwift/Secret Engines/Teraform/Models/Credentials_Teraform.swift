@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Terraform {
+public extension Vault.SecretEngines.TerraformClient {
     struct Credentials: Decodable, Sendable {
         public let token: String?
         public let tokenID: String?

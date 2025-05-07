@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.RabbitMQ {
+public extension Vault.SecretEngines.RabbitMQClient {
     struct Lease: Encodable, Sendable {
         public let timeToLive: Int?
         public let maximumTimeToLive: Int?

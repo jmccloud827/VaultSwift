@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Consul {
+public extension Vault.SecretEngines.ConsulClient {
     struct Credentials: Decodable, Sendable {
         public let token: String
         

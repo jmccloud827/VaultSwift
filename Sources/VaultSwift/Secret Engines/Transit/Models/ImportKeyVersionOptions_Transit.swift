@@ -1,11 +1,11 @@
 import Foundation
 
-public extension Vault.Transit {
+public extension Vault.SecretEngines.TransitClient {
     struct ImportKeyVersionOptions: Encodable, Sendable {
         public let base64EncodedCipherText: Bool?
-        public let hashType: HashType?
+        public let hashType: HashFunctionType?
         
-        public init(base64EncodedCipherText: Bool?, hashType: HashType?) {
+        public init(base64EncodedCipherText: Bool?, hashType: HashFunctionType?) {
             self.base64EncodedCipherText = base64EncodedCipherText
             self.hashType = hashType
         }

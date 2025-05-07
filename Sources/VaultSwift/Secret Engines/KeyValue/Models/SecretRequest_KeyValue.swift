@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.KeyValue {
+public extension Vault.SecretEngines.KeyValueClient {
     struct SecretRequest<T: Encodable>: Encodable {
         public let data: T
         public let options: Options?

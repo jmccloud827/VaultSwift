@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Database {
+public extension Vault.SecretEngines.DatabaseClient {
     struct StaticRole: Codable, Sendable {
         let username: String?
         let databaseProviderType: DatabaseProviderType?

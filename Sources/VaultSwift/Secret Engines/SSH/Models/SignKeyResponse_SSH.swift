@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.SSH {
+public extension Vault.SecretEngines.SSHClient {
     struct SignKeyResponse: Decodable, Sendable {
         public let serialNumber: String?
         public let signedKey: String?

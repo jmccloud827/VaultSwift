@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Transit {
+public extension Vault.SecretEngines.TransitClient {
     struct EncryptionKey: Decodable, Sendable {
         public let allowPlaintextBackup: Bool
         public let autoRotatePeriod: Int

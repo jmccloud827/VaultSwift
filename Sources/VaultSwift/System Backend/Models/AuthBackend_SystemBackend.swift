@@ -2,7 +2,7 @@ import Foundation
 
 public extension Vault.SystemBackend {
     struct AuthBackend: Codable, Sendable {
-        public let type: Vault.AuthProviderType
+        public let type: Vault.AuthProviders.MethodType
         public let id: String?
         public let accessor: String?
         public let config: [String: JSONAny]?
@@ -17,7 +17,7 @@ public extension Vault.SystemBackend {
         public let runningSHA256: String?
         public let sealWrap: Bool?
         
-        public init(type: Vault.AuthProviderType,
+        public init(type: Vault.AuthProviders.MethodType,
                     id: String?,
                     accessor: String?,
                     config: [String: JSONAny]?,

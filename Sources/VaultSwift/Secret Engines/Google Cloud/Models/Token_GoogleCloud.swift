@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.GoogleCloud {
+public extension Vault.SecretEngines.GoogleCloudClient {
     struct Token: Decodable, Sendable {
         public let token: String
         public let expiresAtSeconds: Int

@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Database {
+public extension Vault.SecretEngines.DatabaseClient {
     struct Role: Codable, Sendable {
         public let databaseProviderType: DatabaseProviderType?
         public let defaultTimeToLive: Int?

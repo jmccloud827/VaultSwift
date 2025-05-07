@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.MongoDBAtlas {
+public extension Vault.SecretEngines.MongoDBAtlasClient {
     struct Credentials: Decodable, Sendable {
         public let leaseDuration: String?
         public let leaseRenewable: String?

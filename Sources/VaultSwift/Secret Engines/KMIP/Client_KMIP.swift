@@ -1,8 +1,8 @@
 import Foundation
 
-public extension Vault.KMIP {
-    struct Client {
-        private let config: Config
+public extension Vault.SecretEngines {
+    struct KMIPClient: BackendClient {
+        public let config: Config
         private let client: Vault.Client
             
         public init(config: Config, vaultConfig: Vault.Config) {
@@ -36,11 +36,11 @@ public extension Vault.KMIP {
         }
         
         public struct Config {
-            let mount: String
-            let wrapTimeToLive: String?
+            public let mount: String
+            public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? SecretEngineType.kmip.rawValue)
+                self.mount = "/" + (mount ?? MountType.kmip.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
@@ -48,9 +48,7 @@ public extension Vault.KMIP {
 }
 
 public extension Vault {
-    enum KMIP {}
-    
-    func buildKMIPClient(config: KMIP.Client.Config) -> KMIP.Client {
+    func buildKMIPClient(config: SecretEngines.KMIPClient.Config) -> SecretEngines.KMIPClient {
         .init(config: config, client: client)
     }
 }

@@ -2,18 +2,16 @@ import Foundation
 
 public extension Vault.SystemBackend {
     struct Client {
-        public let plugins: Plugins
-        public let enterprise: Enterprise
+        public let pluginsClient: PluginsClient
+        public let mfaClient: MFAClient
+        public let enterpriseClient: EnterpriseClient
         private let client: Vault.Client
         private let basePath = "v1/sys"
             
-        public init(vaultConfig: Vault.Config) {
-            self.init(client: .init(config: vaultConfig))
-        }
-            
         init(client: Vault.Client) {
-            self.plugins = .init(client: client)
-            self.enterprise = .init(client: client)
+            self.pluginsClient = .init(client: client)
+            self.enterpriseClient = .init(client: client)
+            self.mfaClient = .init(client: client)
             self.client = client
         }
         
@@ -43,15 +41,15 @@ public extension Vault.SystemBackend {
             try await client.makeCall(path: basePath + "/auth/" + (mount?.trim() ?? authBackend.type.rawValue), httpMethod: .post, request: authBackend, wrapTimeToLive: nil)
         }
         
-        public func unmount(authBackend: Vault.AuthProviderType, mount: String? = nil) async throws(VaultError) {
+        public func unmount(authBackend: Vault.AuthProviders.MethodType, mount: String? = nil) async throws(VaultError) {
             try await client.makeCall(path: basePath + "/auth/" + (mount?.trim() ?? authBackend.rawValue), httpMethod: .delete, wrapTimeToLive: nil)
         }
         
-        public func getConfigFor(authBackend: Vault.AuthProviderType, mount: String? = nil) async throws(VaultError) -> VaultResponse<BackendConfig> {
+        public func getConfigFor(authBackend: Vault.AuthProviders.MethodType, mount: String? = nil) async throws(VaultError) -> VaultResponse<BackendConfig> {
             try await client.makeCall(path: basePath + "/auth/" + (mount?.trim() ?? authBackend.rawValue) + "/tune", httpMethod: .get, wrapTimeToLive: nil)
         }
         
-        public func writeConfigFor(authBackend: Vault.AuthProviderType, mount: String? = nil, config: BackendConfig) async throws(VaultError) {
+        public func writeConfigFor(authBackend: Vault.AuthProviders.MethodType, mount: String? = nil, config: BackendConfig) async throws(VaultError) {
             try await client.makeCall(path: basePath + "/auth/" + (mount?.trim() ?? authBackend.rawValue) + "/tune", httpMethod: .post, request: config, wrapTimeToLive: nil)
         }
         
@@ -221,15 +219,15 @@ public extension Vault.SystemBackend {
             try await client.makeCall(path: basePath + "/mounts/" + (mount?.trim() ?? secretEngine.type.rawValue), httpMethod: .post, request: secretEngine, wrapTimeToLive: nil)
         }
         
-        public func unmount(secretEngine: Vault.SecretEngineType, mount: String? = nil) async throws(VaultError) {
+        public func unmount(secretEngine: Vault.SecretEngines.MountType, mount: String? = nil) async throws(VaultError) {
             try await client.makeCall(path: basePath + "/mounts/" + (mount?.trim() ?? secretEngine.rawValue), httpMethod: .delete, wrapTimeToLive: nil)
         }
         
-        public func getConfigFor(secretEngine: Vault.AuthProviderType, mount: String? = nil) async throws(VaultError) -> VaultResponse<BackendConfig> {
+        public func getConfigFor(secretEngine: Vault.SecretEngines.MountType, mount: String? = nil) async throws(VaultError) -> VaultResponse<BackendConfig> {
             try await client.makeCall(path: basePath + "/mounts/" + (mount?.trim() ?? secretEngine.rawValue) + "/tune", httpMethod: .get, wrapTimeToLive: nil)
         }
         
-        public func writeConfigFor(secretEngine: Vault.AuthProviderType, mount: String? = nil, config: BackendConfig) async throws(VaultError) {
+        public func writeConfigFor(secretEngine: Vault.SecretEngines.MountType, mount: String? = nil, config: BackendConfig) async throws(VaultError) {
             try await client.makeCall(path: basePath + "/mounts/" + (mount?.trim() ?? secretEngine.rawValue) + "/tune", httpMethod: .post, request: config, wrapTimeToLive: nil)
         }
         
@@ -264,13 +262,124 @@ public extension Vault.SystemBackend {
         public func delete(aclPolicy: String) async throws(VaultError) {
             try await client.makeCall(path: basePath + "/policy/acl/" + aclPolicy.trim(), httpMethod: .delete, wrapTimeToLive: nil)
         }
+        
+        public func generatePasswordFor(passwordPolicy: String) async throws(VaultError) -> VaultResponse<PasswordResponse> {
+            try await client.makeCall(path: basePath + "/policies/password/" + passwordPolicy.trim() + "/generate", httpMethod: .get, wrapTimeToLive: nil)
+        }
+        
+        public func getAllRawSecretKeys(prefix: String) async throws(VaultError) -> VaultResponse<Vault.Keys> {
+            try await client.makeCall(path: basePath + "/raw/" + prefix.trim() + "/", httpMethod: .list, wrapTimeToLive: nil)
+        }
+        
+        public func get(rawSecret: String) async throws(VaultError) -> VaultResponse<[String: JSONAny]> {
+            try await client.makeCall(path: basePath + "/raw/" + rawSecret.trim(), httpMethod: .get, wrapTimeToLive: nil)
+        }
+        
+        public func write(rawSecret: String, values: [String: JSONAny]) async throws(VaultError) {
+            try await client.makeCall(path: basePath + "/raw/" + rawSecret.trim(), httpMethod: .put, request: values, wrapTimeToLive: nil)
+        }
+        
+        public func delete(rawSecret: String) async throws(VaultError) {
+            try await client.makeCall(path: basePath + "/raw/" + rawSecret.trim(), httpMethod: .delete, wrapTimeToLive: nil)
+        }
+        
+        public func startRekey(options: RekeyRequest) async throws(VaultError) -> RekeyStatus {
+            try await client.makeCall(path: basePath + "/rekey/init", httpMethod: .put, request: options, wrapTimeToLive: nil)
+        }
+        
+        public func getRekeyStatus() async throws(VaultError) -> RekeyStatus {
+            try await client.makeCall(path: basePath + "/rekey/init", httpMethod: .get, wrapTimeToLive: nil)
+        }
+        
+        public func cancelRekey() async throws(VaultError) {
+            try await client.makeCall(path: basePath + "/rekey/init", httpMethod: .delete, wrapTimeToLive: nil)
+        }
+        
+        public func continueRekey(masterShareKey: String, rekeyNonce: String) async throws(VaultError) -> RekeyProgress {
+            let request = ["key": masterShareKey, "nonce": rekeyNonce]
+            
+            return try await client.makeCall(path: basePath + "/rekey/update", httpMethod: .put, request: request, wrapTimeToLive: nil)
+        }
+        
+        public func quickRekey(allMasterShareKeys: [String], rekeyNonce: String) async throws(VaultError) -> RekeyProgress? {
+            var response: RekeyProgress? = nil
+            
+            for key in allMasterShareKeys {
+                response = try await continueRekey(masterShareKey: key, rekeyNonce: rekeyNonce)
+                
+                if response?.complete == true {
+                    break
+                }
+            }
+            
+            return response
+        }
+        
+        public func getRekeyBackup() async throws(VaultError) -> VaultResponse<RekeyBackup> {
+            try await client.makeCall(path: basePath + "/rekey/backup", httpMethod: .get, wrapTimeToLive: nil)
+        }
+        
+        public func deleteRekeyBackup() async throws(VaultError) {
+            try await client.makeCall(path: basePath + "/rekey/backup", httpMethod: .delete, wrapTimeToLive: nil)
+        }
+        
+        public func seal() async throws(VaultError) {
+            try await client.makeCall(path: basePath + "/seal", httpMethod: .put, wrapTimeToLive: nil)
+        }
+        
+        public func getSealStatus() async throws(VaultError) -> SealStatus {
+            try await client.makeCall(path: basePath + "/seal-status", httpMethod: .get, wrapTimeToLive: nil)
+        }
+        
+        public func unseal(masterShareKey: String? = nil, reset: Bool = false) async throws(VaultError) -> SealStatus {
+            struct Request: Encodable {
+                let masterShareKey: String?
+                let reset: Bool
+            }
+            
+            let request = Request(masterShareKey: masterShareKey, reset: reset)
+            
+            return try await client.makeCall(path: basePath + "/unseal", httpMethod: .put, request: request, wrapTimeToLive: nil)
+        }
+        
+        public func quickUnseal(allMasterShareKeys: [String]) async throws(VaultError) -> SealStatus? {
+            var response: SealStatus? = nil
+            
+            for key in allMasterShareKeys {
+                response = try await unseal(masterShareKey: key)
+                
+                if response?.sealed == false {
+                    break
+                }
+            }
+            
+            return response
+        }
+        
+        public func getWrapInfoFor(token: String) async throws(VaultError) -> TokenWrapInfo {
+            let request = ["token": token]
+            
+            return try await client.makeCall(path: basePath + "/wrapping/lookup", httpMethod: .post, request: request, wrapTimeToLive: nil)
+        }
+        
+        public func wrap<TData: Encodable, TResponse: Decodable>(data: [String: TData]) async throws(VaultError) -> VaultResponse<TResponse> {
+            try await client.makeCall(path: basePath + "/wrapping/wrap", httpMethod: .post, request: data, wrapTimeToLive: nil)
+        }
+        
+        public func unwrap<TResponse: Decodable>(token: String) async throws(VaultError) -> VaultResponse<TResponse> {
+            let request = ["token": token]
+            
+            return try await client.makeCall(path: basePath + "/wrapping/unwrap", httpMethod: .post, request: request, wrapTimeToLive: nil)
+        }
+        
+        public func rewrap<TResponse: Decodable>(token: String) async throws(VaultError) -> VaultResponse<TResponse> {
+            let request = ["token": token]
+            
+            return try await client.makeCall(path: basePath + "/wrapping/rewrap", httpMethod: .post, request: request, wrapTimeToLive: nil)
+        }
     }
 }
 
 public extension Vault {
     enum SystemBackend {}
-    
-    func buildSystemBackendClient() -> SystemBackend.Client {
-        .init(client: client)
-    }
 }

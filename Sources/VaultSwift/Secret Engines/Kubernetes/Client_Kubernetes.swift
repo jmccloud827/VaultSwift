@@ -1,8 +1,8 @@
 import Foundation
 
-public extension Vault.Kubernetes {
-    struct Client {
-        private let config: Config
+public extension Vault.SecretEngines {
+    struct KubernetesClient: BackendClient {
+        public let config: Config
         private let client: Vault.Client
             
         public init(config: Config, vaultConfig: Vault.Config) {
@@ -23,11 +23,11 @@ public extension Vault.Kubernetes {
         }
             
         public struct Config {
-            let mount: String
-            let wrapTimeToLive: String?
+            public let mount: String
+            public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? SecretEngineType.kubernetes.rawValue)
+                self.mount = "/" + (mount ?? MountType.kubernetes.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
@@ -35,9 +35,7 @@ public extension Vault.Kubernetes {
 }
 
 public extension Vault {
-    enum Kubernetes {}
-    
-    func buildKubernetesClient(config: Kubernetes.Client.Config) -> Kubernetes.Client {
+    func buildKubernetesClient(config: SecretEngines.KubernetesClient.Config) -> SecretEngines.KubernetesClient {
         .init(config: config, client: client)
     }
 }

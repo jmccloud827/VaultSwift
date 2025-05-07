@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.AWS {
+public extension Vault.SecretEngines.AWSClient {
     struct RotateRootIAMCredentialsResponse: Decodable, Sendable {
         public let accessKey: String?
         

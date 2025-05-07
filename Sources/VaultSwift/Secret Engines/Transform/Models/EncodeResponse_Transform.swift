@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Transform {
+public extension Vault.SecretEngines.TransformClient {
     struct EncodeResponse: Decodable, Sendable {
         public let encodedItems: [Item]
         

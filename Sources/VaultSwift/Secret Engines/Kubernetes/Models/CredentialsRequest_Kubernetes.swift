@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Vault.Kubernetes {
+public extension Vault.SecretEngines.KubernetesClient {
     struct CredentialsRequest: Encodable, Sendable {
         public let namespace: String
         public let clusterRoleBinding: String?
