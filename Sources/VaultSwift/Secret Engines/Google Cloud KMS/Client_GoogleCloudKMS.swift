@@ -5,7 +5,7 @@ public extension Vault.SecretEngines {
         public let config: Config
         private let client: Vault.Client
             
-        public init(config: Config, vaultConfig: Vault.Config) {
+        public init(config: Config = .init(), vaultConfig: Vault.Config) {
             self.init(config: config, client: .init(config: vaultConfig))
         }
             
@@ -14,41 +14,41 @@ public extension Vault.SecretEngines {
             self.client = client
         }
         
-        public func encrypt(key: String, options: EncryptRequest) async throws(VaultError) -> VaultResponse<EncryptResponse> {
+        public func encrypt(key: String, options: EncryptRequest) async throws -> VaultResponse<EncryptResponse> {
             guard !key.isEmpty else {
-                throw .init(error: "Key must not be empty")
+                throw VaultError(error: "Key must not be empty")
             }
             
             return try await client.makeCall(path: config.mount + "/encrypt/" + key.trim(), httpMethod: .post, wrapTimeToLive: config.wrapTimeToLive)
         }
         
-        public func decrypt(key: String, options: DecryptRequest) async throws(VaultError) -> VaultResponse<DecryptResponse> {
+        public func decrypt(key: String, options: DecryptRequest) async throws -> VaultResponse<DecryptResponse> {
             guard !key.isEmpty else {
-                throw .init(error: "Key must not be empty")
+                throw VaultError(error: "Key must not be empty")
             }
             
             return try await client.makeCall(path: config.mount + "/decrypt/" + key.trim(), httpMethod: .post, wrapTimeToLive: config.wrapTimeToLive)
         }
         
-        public func reEncrypt(key: String, options: ReEncryptRequest) async throws(VaultError) -> VaultResponse<ReEncryptResponse> {
+        public func reEncrypt(key: String, options: ReEncryptRequest) async throws -> VaultResponse<ReEncryptResponse> {
             guard !key.isEmpty else {
-                throw .init(error: "Key must not be empty")
+                throw VaultError(error: "Key must not be empty")
             }
             
             return try await client.makeCall(path: config.mount + "/reencrypt/" + key.trim(), httpMethod: .post, wrapTimeToLive: config.wrapTimeToLive)
         }
         
-        public func sign(key: String, options: SignRequest) async throws(VaultError) -> VaultResponse<SignResponse> {
+        public func sign(key: String, options: SignRequest) async throws -> VaultResponse<SignResponse> {
             guard !key.isEmpty else {
-                throw .init(error: "Key must not be empty")
+                throw VaultError(error: "Key must not be empty")
             }
             
             return try await client.makeCall(path: config.mount + "/sign/" + key.trim(), httpMethod: .post, wrapTimeToLive: config.wrapTimeToLive)
         }
         
-        public func verify(key: String, options: VerifyRequest) async throws(VaultError) -> VaultResponse<VerifyResponse> {
+        public func verify(key: String, options: VerifyRequest) async throws -> VaultResponse<VerifyResponse> {
             guard !key.isEmpty else {
-                throw .init(error: "Key must not be empty")
+                throw VaultError(error: "Key must not be empty")
             }
             
             return try await client.makeCall(path: config.mount + "/verify/" + key.trim(), httpMethod: .post, wrapTimeToLive: config.wrapTimeToLive)
@@ -59,15 +59,15 @@ public extension Vault.SecretEngines {
             public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? MountType.googleCloudKMS.rawValue)
+                self.mount = "/" + (mount?.trim() ?? MountType.googleCloudKMS.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
     }
 }
 
-public extension Vault {
-    func buildGoogleCloudKMSClient(config: SecretEngines.GoogleCloudKMSClient.Config) -> SecretEngines.GoogleCloudKMSClient {
+public extension Vault.SecretEngines {
+    func buildGoogleCloudKMSClient(config: GoogleCloudKMSClient.Config) -> GoogleCloudKMSClient {
         .init(config: config, client: client)
     }
 }

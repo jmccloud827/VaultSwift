@@ -7,8 +7,8 @@ public extension Vault.SecretEngines.PKIClient {
         let tidyRevokedCerts: Bool?
         let tidyState: TidyState?
         let error: String?
-        let timeStarted: Date?
-        let timeFinished: Date?
+        let timeStarted: String?
+        let timeFinished: String?
         let message: String?
         let certStoreDeletedCount: Int?
         let revokedCertDeletedCount: String?

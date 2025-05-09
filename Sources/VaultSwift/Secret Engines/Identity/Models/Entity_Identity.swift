@@ -9,8 +9,8 @@ public extension Vault.SecretEngines.IdentityClient {
         public let disabled: Bool
         public let aliases: [String]?
         public let bucketKeyHash: String?
-        public let creationTime: Date?
-        public let lastUpdateTime: Date?
+        public let creationTime: String?
+        public let lastUpdateTime: String?
         
         enum CodingKeys: String, CodingKey {
             case id

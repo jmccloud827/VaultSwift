@@ -6,11 +6,11 @@ extension Vault.AuthProviders {
         let mount: String?
         let client: Vault.Client
         
-        func getToken() async throws(VaultError) -> String {
-            let response: VaultResponse<[String: JSONAny]> = try await client.makeCall(path: "v1/auth/\(mount?.trim() ?? MethodType.azure.rawValue)/login", httpMethod: .post, request: request, wrapTimeToLive: nil)
+        func getToken() async throws -> String {
+            let response: VaultResponse<JSONAny> = try await client.makeCall(path: "v1/auth/\(mount?.trim() ?? MethodType.azure.rawValue)/login", httpMethod: .post, request: request, wrapTimeToLive: nil)
             
             guard let auth = response.auth else {
-                throw .init(error: "Auth was nil")
+                throw VaultError(error: "Unable to locate token")
             }
             
             return auth.clientToken

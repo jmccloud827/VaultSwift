@@ -4,7 +4,7 @@ public extension Vault.SystemBackend {
     struct Leader: Decodable, Sendable {
         public let highAvailabilityEnabled: Bool?
         public let isSelf: Bool?
-        public let activeTime: Date?
+        public let activeTime: String?
         public let address: String?
         public let clusterAddress: String?
         public let performanceStandby: Bool?

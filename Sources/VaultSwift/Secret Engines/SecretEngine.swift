@@ -1,7 +1,13 @@
 import Foundation
 
 public extension Vault {
-    enum SecretEngines {
+    struct SecretEngines {
+        let client: Vault.Client
+        
+        init(client: Vault.Client) {
+            self.client = client
+        }
+        
         public enum MountType: Codable, Sendable {
             case activeDirectory
             case aliCloud

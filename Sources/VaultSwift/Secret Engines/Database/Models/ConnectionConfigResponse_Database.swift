@@ -4,10 +4,10 @@ public extension Vault.SecretEngines.DatabaseClient {
     struct ConnectionConfigResponse: Decodable, Sendable {
         public let pluginName: String?
         public let pluginVersion: String?
-        public let allowedRoles: [String]
-        public let connectionDetails: ConnectionDetailsModel
+        public let allowedRoles: [String]?
+        public let connectionDetails: ConnectionDetailsModel?
         public let passwordPolicyName: String?
-        public let rootCredentialsRotateStatements: [String]
+        public let rootCredentialsRotateStatements: [String]?
 
         enum CodingKeys: String, CodingKey {
             case pluginName = "plugin_name"

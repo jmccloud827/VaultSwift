@@ -1,24 +1,24 @@
 import Foundation
 
 public extension Vault.SecretEngines.TransitClient {
-    struct EncryptionKey: Decodable, Sendable {
-        public let allowPlaintextBackup: Bool
-        public let autoRotatePeriod: Int
-        public let deletionAllowed: Bool
-        public let derived: Bool
-        public let exportable: Bool
-        public let importedKey: Bool
-        public let keys: [String: JSONAny]
-        public let latestVersion: Int
-        public let minimumAvailableVersion: Int
-        public let minimumDecryptionVersion: Int
-        public let minimumEncryptionVersion: Int
-        public let name: String
-        public let supportsEncryption: Bool
-        public let supportsDecryption: Bool
-        public let supportsDerivation: Bool
-        public let supportsSigning: Bool
-        public let type: KeyType
+    struct EncryptionKey<T: Decodable & Sendable>: Decodable, Sendable {
+        public let allowPlaintextBackup: Bool?
+        public let autoRotatePeriod: Int?
+        public let deletionAllowed: Bool?
+        public let derived: Bool?
+        public let exportable: Bool?
+        public let importedKey: Bool?
+        public let keys: T?
+        public let latestVersion: Int?
+        public let minimumAvailableVersion: Int?
+        public let minimumDecryptionVersion: Int?
+        public let minimumEncryptionVersion: Int?
+        public let name: String?
+        public let supportsEncryption: Bool?
+        public let supportsDecryption: Bool?
+        public let supportsDerivation: Bool?
+        public let supportsSigning: Bool?
+        public let type: KeyType?
 
         enum CodingKeys: String, CodingKey {
             case allowPlaintextBackup = "allow_plaintext_backup"

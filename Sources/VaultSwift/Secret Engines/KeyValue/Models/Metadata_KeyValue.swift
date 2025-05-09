@@ -2,9 +2,9 @@ import Foundation
 
 public extension Vault.SecretEngines.KeyValueClient {
     struct Metadata: Decodable, Sendable {
-        public let createdTime: Date
+        public let createdTime: String?
         public let customMetadata: [String: String]?
-        public let deletedTime: Date
+        public let deletedTime: String?
         public let destroyed: Bool
         public let version: Int
         

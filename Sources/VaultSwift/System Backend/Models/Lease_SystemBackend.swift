@@ -3,9 +3,9 @@ import Foundation
 public extension Vault.SystemBackend {
     struct Lease: Decodable, Sendable {
         public let id: String?
-        public let issueTime: Date?
-        public let expiryTime: Date?
-        public let lastRenewalTime: Date?
+        public let issueTime: String?
+        public let expiryTime: String?
+        public let lastRenewalTime: String?
         public let renewable: Bool?
         public let timeToLive: Int?
 

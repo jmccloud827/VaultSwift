@@ -5,7 +5,7 @@ public extension Vault.SecretEngines {
         public let config: Config
         private let client: Vault.Client
             
-        public init(config: Config, vaultConfig: Vault.Config) {
+        public init(config: Config = .init(), vaultConfig: Vault.Config) {
             self.init(config: config, client: .init(config: vaultConfig))
         }
             
@@ -14,33 +14,33 @@ public extension Vault.SecretEngines {
             self.client = client
         }
             
-        public func getCredentialsFor(role: String, options: CredentialsOptions) async throws(VaultError) -> VaultResponse<Credentials> {
+        public func getCredentialsFor(role: String, options: CredentialsOptions) async throws -> VaultResponse<Credentials> {
             guard !role.isEmpty else {
-                throw .init(error: "Key must not be empty")
+                throw VaultError(error: "Role must not be empty")
             }
         
             return try await client.makeCall(path: config.mount + "/issue/" + role.trim(), httpMethod: .post, request: options, wrapTimeToLive: config.wrapTimeToLive)
         }
         
-        public func getCertificateFor(serialNumber: String) async throws(VaultError) -> VaultResponse<Certificate> {
+        public func getCertificateFor(serialNumber: String) async throws -> VaultResponse<Certificate> {
             guard !serialNumber.isEmpty else {
-                throw .init(error: "Key must not be empty")
+                throw VaultError(error: "Serial Number must not be empty")
             }
             
             return try await client.makeCall(path: config.mount + "/cert/" + serialNumber.trim(), httpMethod: .get, wrapTimeToLive: nil)
         }
         
-        public func signCertificateFor(role: String, options: SignCertificateOptions) async throws(VaultError) -> VaultResponse<Credentials> {
+        public func signCertificateFor(role: String, options: SignCertificateOptions) async throws -> VaultResponse<Credentials> {
             guard !role.isEmpty else {
-                throw .init(error: "Key must not be empty")
+                throw VaultError(error: "Role must not be empty")
             }
         
             return try await client.makeCall(path: config.mount + "/sign/" + role.trim(), httpMethod: .post, request: options, wrapTimeToLive: config.wrapTimeToLive)
         }
         
-        public func revokeCertificateFor(serialNumber: String) async throws(VaultError) -> VaultResponse<RevokedCertificate> {
+        public func revokeCertificateFor(serialNumber: String) async throws -> VaultResponse<RevokedCertificate> {
             guard !serialNumber.isEmpty else {
-                throw .init(error: "Key must not be empty")
+                throw VaultError(error: "Serial Number must not be empty")
             }
             
             let request = ["serial_number": serialNumber]
@@ -48,27 +48,27 @@ public extension Vault.SecretEngines {
             return try await client.makeCall(path: config.mount + "/revoke", httpMethod: .post, request: request, wrapTimeToLive: nil)
         }
         
-        public func listAllCertificates() async throws(VaultError) -> VaultResponse<Vault.Keys> {
+        public func listAllCertificates() async throws -> VaultResponse<Vault.Keys> {
             try await client.makeCall(path: config.mount + "/certs", httpMethod: .list, wrapTimeToLive: nil)
         }
         
-        public func listAllRevokedCertificates() async throws(VaultError) -> VaultResponse<Vault.Keys> {
+        public func listAllRevokedCertificates() async throws -> VaultResponse<Vault.Keys> {
             try await client.makeCall(path: config.mount + "/certs/revoked", httpMethod: .list, wrapTimeToLive: nil)
         }
         
-        public func tidy(request: TidyRequest) async throws(VaultError) {
+        public func tidy(request: TidyRequest) async throws {
             try await client.makeCall(path: config.mount + "/tidy", httpMethod: .post, request: request, wrapTimeToLive: nil)
         }
         
-        public func autoTidy(request: AutoTidyRequest) async throws(VaultError) {
+        public func autoTidy(request: AutoTidyRequest) async throws {
             try await client.makeCall(path: config.mount + "/config/auto-tidy", httpMethod: .post, request: request, wrapTimeToLive: nil)
         }
         
-        public func getTidyStatus() async throws(VaultError) -> VaultResponse<TidyStatus> {
+        public func getTidyStatus() async throws -> VaultResponse<TidyStatus> {
             try await client.makeCall(path: config.mount + "/tidy-status", httpMethod: .get, wrapTimeToLive: nil)
         }
         
-        public func cancelTidy() async throws(VaultError) -> VaultResponse<TidyStatus> {
+        public func cancelTidy() async throws -> VaultResponse<TidyStatus> {
             try await client.makeCall(path: config.mount + "/tidy-cancel", httpMethod: .post, wrapTimeToLive: nil)
         }
         
@@ -77,15 +77,15 @@ public extension Vault.SecretEngines {
             public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? MountType.pki.rawValue)
+                self.mount = "/" + (mount?.trim() ?? MountType.pki.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
     }
 }
 
-public extension Vault {
-    func buildPKIClient(config: SecretEngines.PKIClient.Config) -> SecretEngines.PKIClient {
+public extension Vault.SecretEngines {
+    func buildPKIClient(config: PKIClient.Config) -> PKIClient {
         .init(config: config, client: client)
     }
 }

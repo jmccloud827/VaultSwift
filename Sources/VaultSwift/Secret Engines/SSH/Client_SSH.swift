@@ -5,7 +5,7 @@ public extension Vault.SecretEngines {
         public let config: Config
         private let client: Vault.Client
             
-        public init(config: Config, vaultConfig: Vault.Config) {
+        public init(config: Config = .init(), vaultConfig: Vault.Config) {
             self.init(config: config, client: .init(config: vaultConfig))
         }
             
@@ -14,13 +14,13 @@ public extension Vault.SecretEngines {
             self.client = client
         }
             
-        public func getCredentialsFor(role: String, ipAddress: String, username: String? = nil) async throws(VaultError) -> VaultResponse<Credentials> {
+        public func getCredentialsFor(role: String, ipAddress: String, username: String? = nil) async throws -> VaultResponse<Credentials> {
             guard !role.isEmpty else {
-                throw .init(error: "Key must not be empty")
+                throw VaultError(error: "Role must not be empty")
             }
             
             guard !ipAddress.isEmpty else {
-                throw .init(error: "Key must not be empty")
+                throw VaultError(error: "IP Address must not be empty")
             }
             
             let request = [
@@ -31,9 +31,9 @@ public extension Vault.SecretEngines {
             return try await client.makeCall(path: config.mount + "/creds/" + role.trim(), httpMethod: .post, request: request, wrapTimeToLive: config.wrapTimeToLive)
         }
         
-        public func signKeyFor(role: String, data: SignKeyRequest) async throws(VaultError) -> VaultResponse<SignKeyResponse> {
+        public func signKeyFor(role: String, data: SignKeyRequest) async throws -> VaultResponse<SignKeyResponse> {
             guard !role.isEmpty else {
-                throw .init(error: "Key must not be empty")
+                throw VaultError(error: "Role must not be empty")
             }
         
             return try await client.makeCall(path: config.mount + "/sign/" + role.trim(), httpMethod: .post, request: data, wrapTimeToLive: nil)
@@ -44,15 +44,15 @@ public extension Vault.SecretEngines {
             public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? MountType.ssh.rawValue)
+                self.mount = "/" + (mount?.trim() ?? MountType.ssh.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
     }
 }
 
-public extension Vault {
-    func buildSSHClient(config: SecretEngines.SSHClient.Config) -> SecretEngines.SSHClient {
+public extension Vault.SecretEngines {
+    func buildSSHClient(config: SSHClient.Config) -> SSHClient {
         .init(config: config, client: client)
     }
 }

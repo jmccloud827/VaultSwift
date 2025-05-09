@@ -5,7 +5,7 @@ public extension Vault.SecretEngines {
         public let config: Config
         private let client: Vault.Client
             
-        public init(config: Config, vaultConfig: Vault.Config) {
+        public init(config: Config = .init(), vaultConfig: Vault.Config) {
             self.init(config: config, client: .init(config: vaultConfig))
         }
             
@@ -14,57 +14,57 @@ public extension Vault.SecretEngines {
             self.client = client
         }
         
-        public func write(rootIAMCredentials: RootIAMCredentialsConfig) async throws(VaultError) {
+        public func write(rootIAMCredentials: RootIAMCredentialsConfig) async throws {
             try await client.makeCall(path: self.config.mount + "/config/root", httpMethod: .post, request: rootIAMCredentials, wrapTimeToLive: nil)
         }
         
-        public func getRootIAMCredentials() async throws(VaultError) -> VaultResponse<RootIAMCredentialsConfig> {
+        public func getRootIAMCredentials() async throws -> VaultResponse<RootIAMCredentialsConfig> {
             try await client.makeCall(path: self.config.mount + "/config/root", httpMethod: .get, wrapTimeToLive: config.wrapTimeToLive)
         }
         
-        public func rotateRootIAMCredentials() async throws(VaultError) -> VaultResponse<RotateRootIAMCredentialsResponse> {
+        public func rotateRootIAMCredentials() async throws -> VaultResponse<RotateRootIAMCredentialsResponse> {
             try await client.makeCall(path: self.config.mount + "/config/rotate-root", httpMethod: .post, wrapTimeToLive: nil)
         }
         
-        public func write(lease: LeaseConfig) async throws(VaultError) {
+        public func write(lease: LeaseConfig) async throws {
             try await client.makeCall(path: self.config.mount + "/config/lease", httpMethod: .post, request: lease, wrapTimeToLive: nil)
         }
         
-        public func getLease() async throws(VaultError) -> VaultResponse<LeaseConfig> {
+        public func getLease() async throws -> VaultResponse<LeaseConfig> {
             try await client.makeCall(path: self.config.mount + "/config/lease", httpMethod: .get, wrapTimeToLive: config.wrapTimeToLive)
         }
         
-        public func write(role: String, data: RoleRequest) async throws(VaultError) {
+        public func write(role: String, data: RoleRequest) async throws {
             guard !role.isEmpty else {
-                throw .init(error: "Path must not be empty")
+                throw VaultError(error: "Role must not be empty")
             }
             
             try await client.makeCall(path: self.config.mount + "/roles/" + role.trim(), httpMethod: .post, request: data, wrapTimeToLive: nil)
         }
             
-        public func get(role: String) async throws(VaultError) -> VaultResponse<RoleResponse> {
+        public func get(role: String) async throws -> VaultResponse<RoleResponse> {
             guard !role.isEmpty else {
-                throw .init(error: "Path must not be empty")
+                throw VaultError(error: "Role must not be empty")
             }
             
             return try await client.makeCall(path: self.config.mount + "/roles/" + role.trim(), httpMethod: .get, wrapTimeToLive: config.wrapTimeToLive)
         }
         
-        public func getAllRoles() async throws(VaultError) -> VaultResponse<Vault.Keys> {
+        public func getAllRoles() async throws -> VaultResponse<Vault.Keys> {
             try await client.makeCall(path: self.config.mount + "/roles", httpMethod: .list, wrapTimeToLive: config.wrapTimeToLive)
         }
         
-        public func delete(role: String) async throws(VaultError) {
+        public func delete(role: String) async throws {
             guard !role.isEmpty else {
-                throw .init(error: "Path must not be empty")
+                throw VaultError(error: "Role must not be empty")
             }
             
             try await client.makeCall(path: self.config.mount + "/roles/" + role.trim(), httpMethod: .delete, wrapTimeToLive: nil)
         }
         
-        public func getCredentialsFor(role: String, arn: String? = nil, sessionName: String? = nil) async throws(VaultError) -> VaultResponse<Credentials> {
+        public func getCredentialsFor(role: String, arn: String? = nil, sessionName: String? = nil) async throws -> VaultResponse<Credentials> {
             guard !role.isEmpty else {
-                throw .init(error: "Path must not be empty")
+                throw VaultError(error: "Role must not be empty")
             }
             
             var queryParameters: [String] = []
@@ -82,9 +82,9 @@ public extension Vault.SecretEngines {
             return try await client.makeCall(path: self.config.mount + "/creds/" + role.trim() + queryString, httpMethod: .get, wrapTimeToLive: config.wrapTimeToLive)
         }
         
-        public func generateSTSCredentialsFor(role: String, arn: String? = nil, sessionName: String? = nil, timeToLive: String = "1h") async throws(VaultError) -> VaultResponse<Credentials> {
+        public func generateSTSCredentialsFor(role: String, arn: String? = nil, sessionName: String? = nil, timeToLive: String = "1h") async throws -> VaultResponse<Credentials> {
             guard !role.isEmpty else {
-                throw .init(error: "Path must not be empty")
+                throw VaultError(error: "Role must not be empty")
             }
             
             var request: [String: String] = [:]
@@ -109,15 +109,15 @@ public extension Vault.SecretEngines {
             public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? MountType.aws.rawValue)
+                self.mount = "/" + (mount?.trim() ?? MountType.aws.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
     }
 }
 
-public extension Vault {
-    func buildAWSClient(config: SecretEngines.AWSClient.Config) -> SecretEngines.AWSClient {
+public extension Vault.SecretEngines {
+    func buildAWSClient(config: AWSClient.Config) -> AWSClient {
         .init(config: config, client: client)
     }
 }

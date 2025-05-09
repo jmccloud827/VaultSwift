@@ -3,7 +3,7 @@ import Foundation
 public extension Vault.SecretEngines.PKIClient {
     struct RevokedCertificate: Decodable, Sendable {
         public let revocationTime: Int?
-        public let revocationTimeRFC3339: Date?
+        public let revocationTimeRFC3339: String?
         public let revocationIssuerId: String?
         
         enum CodingKeys: String, CodingKey {

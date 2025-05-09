@@ -26,7 +26,7 @@ public struct VaultResponse<T: Decodable & Sendable>: Decodable {
     public struct WrapInfo: Decodable, Sendable {
         public let token: String
         public let timeToLive: Int
-        public let creationTime: Date
+        public let creationTime: String
         public let accessor: String
         public let creationPath: String
         

@@ -7,13 +7,13 @@ extension Vault.AuthProviders {
         let mount: String?
         let client: Vault.Client
         
-        func getToken() async throws(VaultError) -> String {
+        func getToken() async throws -> String {
             let request = ["role": role, "jwt": jwt]
             
-            let response: VaultResponse<[String: JSONAny]> = try await client.makeCall(path: "v1/auth/\(mount?.trim() ?? MethodType.kubernetes.rawValue)/login", httpMethod: .post, request: request, wrapTimeToLive: nil)
+            let response: VaultResponse<JSONAny> = try await client.makeCall(path: "v1/auth/\(mount?.trim() ?? MethodType.kubernetes.rawValue)/login", httpMethod: .post, request: request, wrapTimeToLive: nil)
             
             guard let auth = response.auth else {
-                throw .init(error: "Auth was nil")
+                throw VaultError(error: "Unable to locate token")
             }
             
             return auth.clientToken

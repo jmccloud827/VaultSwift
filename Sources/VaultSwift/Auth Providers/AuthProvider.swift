@@ -1,9 +1,15 @@
 import Foundation
 
 public extension Vault {
-    enum AuthProviders {
+    struct AuthProviders {
+        let client: Vault.Client
+        
+        init(client: Vault.Client) {
+            self.client = client
+        }
+        
         protocol TokenProvider {
-            func getToken() async throws(VaultError) -> String
+            func getToken() async throws -> String
         }
         
         public enum MethodType: Codable, Sendable {

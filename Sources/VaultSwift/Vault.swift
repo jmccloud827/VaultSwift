@@ -1,13 +1,13 @@
 import Foundation
 
 public struct Vault {
-    let client: Client
-    public let systemsBackendClient: SystemBackend.Client
+    public lazy var systemsBackendClient = SystemBackend.Client(client: client)
+    public lazy var secretEngines = SecretEngines(client: client)
+    public lazy var authProviders = AuthProviders(client: client)
+    private let client: Client
     
     public init(config: Config) {
-        let client = Client(config: .init(baseURI: config.baseURI, namespace: config.namespace, authProvider: config.authProvider))
-        self.client = client
-        self.systemsBackendClient = .init(client: client)
+        self.client = .init(config: .init(baseURI: config.baseURI, namespace: config.namespace, authProvider: config.authProvider))
     }
     
     public struct Config {
@@ -28,8 +28,3 @@ public struct Vault {
         }
     }
 }
-
-// TODO: Check guard error messages
-// TODO: Convert jsonanys to generics
-// TODO: Auth Method clients
-// TODO: MFA clients

@@ -2,14 +2,14 @@ import Foundation
 
 public extension Vault.SecretEngines.KeyValueClient {
     struct FullMetadata: Decodable, Sendable {
-        public let isCheckAndSetRequired: Bool
-        public let createdTime: Date
-        public let currentVersion: Int
+        public let isCheckAndSetRequired: Bool?
+        public let createdTime: String?
+        public let currentVersion: Int?
         public let customMetadata: [String: String]?
-        public let deleteVersionAfter: String
-        public let maxVersions: Int
-        public let oldestVersion: Int
-        public let updatedTime: Date
+        public let deleteVersionAfter: String?
+        public let maxVersions: Int?
+        public let oldestVersion: Int?
+        public let updatedTime: String?
         public let versions: [String: CondensedMetadata]
         
         enum CodingKeys: String, CodingKey {
@@ -26,9 +26,9 @@ public extension Vault.SecretEngines.KeyValueClient {
     }
     
     struct CondensedMetadata: Decodable, Sendable {
-        public let createdTime: Date
-        public let deletedTime: Date
-        public let destroyed: Bool
+        public let createdTime: String?
+        public let deletedTime: String?
+        public let destroyed: Bool?
         
         enum CodingKeys: String, CodingKey {
             case createdTime = "created_time"

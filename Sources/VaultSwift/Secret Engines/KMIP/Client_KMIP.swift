@@ -5,7 +5,7 @@ public extension Vault.SecretEngines {
         public let config: Config
         private let client: Vault.Client
             
-        public init(config: Config, vaultConfig: Vault.Config) {
+        public init(config: Config = .init(), vaultConfig: Vault.Config) {
             self.init(config: config, client: .init(config: vaultConfig))
         }
             
@@ -14,13 +14,13 @@ public extension Vault.SecretEngines {
             self.client = client
         }
             
-        public func getCredentialsFor(role: String, scope: String, certificateFormat: CertificateFormat) async throws(VaultError) -> VaultResponse<Credentials> {
+        public func getCredentialsFor(role: String, scope: String, certificateFormat: CertificateFormat) async throws -> VaultResponse<Credentials> {
             guard !role.isEmpty else {
-                throw .init(error: "Key must not be empty")
+                throw VaultError(error: "Role must not be empty")
             }
             
             guard !scope.isEmpty else {
-                throw .init(error: "Key must not be empty")
+                throw VaultError(error: "Scope must not be empty")
             }
             
             let request = ["format": certificateFormat.rawValue]
@@ -40,15 +40,15 @@ public extension Vault.SecretEngines {
             public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? MountType.kmip.rawValue)
+                self.mount = "/" + (mount?.trim() ?? MountType.kmip.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
     }
 }
 
-public extension Vault {
-    func buildKMIPClient(config: SecretEngines.KMIPClient.Config) -> SecretEngines.KMIPClient {
+public extension Vault.SecretEngines {
+    func buildKMIPClient(config: KMIPClient.Config) -> KMIPClient {
         .init(config: config, client: client)
     }
 }

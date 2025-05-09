@@ -2,10 +2,10 @@ import Foundation
 
 public extension Vault.SecretEngines.ActiveDirectoryClient {
     struct RoleRequest: Encodable, Sendable {
-        public let serviceAccountName: String
-        public let timeToLive: Int
+        public let serviceAccountName: String?
+        public let timeToLive: Int?
         
-        init(serviceAccountName: String, timeToLive: Int) {
+        init(serviceAccountName: String?, timeToLive: Int?) {
             self.serviceAccountName = serviceAccountName
             self.timeToLive = timeToLive
         }

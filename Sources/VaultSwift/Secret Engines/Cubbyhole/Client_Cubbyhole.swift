@@ -5,7 +5,7 @@ public extension Vault.SecretEngines {
         public let config: Config
         private let client: Vault.Client
             
-        public init(config: Config, vaultConfig: Vault.Config) {
+        public init(config: Config = .init(), vaultConfig: Vault.Config) {
             self.init(config: config, client: .init(config: vaultConfig))
         }
             
@@ -14,29 +14,29 @@ public extension Vault.SecretEngines {
             self.client = client
         }
         
-        public func get(secret: String) async throws(VaultError) -> VaultResponse<[String: JSONAny]> {
+        public func get<T: Decodable & Sendable>(secret: String) async throws -> VaultResponse<T> {
             guard !secret.isEmpty else {
-                throw .init(error: "Path must not be empty")
+                throw VaultError(error: "Secret must not be empty")
             }
             
             return try await client.makeCall(path: config.mount + "/" + secret.trim() + "/", httpMethod: .get, wrapTimeToLive: config.wrapTimeToLive)
         }
         
-        public func listSecretPathsFrom(path: String) async throws(VaultError) -> VaultResponse<Vault.Keys> {
+        public func listSecretPathsFrom(path: String) async throws -> VaultResponse<Vault.Keys> {
             try await client.makeCall(path: config.mount + "/" + path.trim() + "/", httpMethod: .list, wrapTimeToLive: config.wrapTimeToLive)
         }
         
-        public func write(secret: String, values: [String: JSONAny]) async throws(VaultError) {
+        public func write<T: Encodable & Sendable>(secret: String, values: T) async throws {
             guard !secret.isEmpty else {
-                throw .init(error: "Path must not be empty")
+                throw VaultError(error: "Secret must not be empty")
             }
             
             return try await client.makeCall(path: config.mount + "/" + secret.trim(), httpMethod: .post, request: values, wrapTimeToLive: nil)
         }
         
-        public func delete(secret: String) async throws(VaultError) {
+        public func delete(secret: String) async throws {
             guard !secret.isEmpty else {
-                throw .init(error: "Path must not be empty")
+                throw VaultError(error: "Secret must not be empty")
             }
             
             try await client.makeCall(path: config.mount + "/" + secret.trim(), httpMethod: .delete, wrapTimeToLive: nil)
@@ -47,15 +47,15 @@ public extension Vault.SecretEngines {
             public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? MountType.cubbyhole.rawValue)
+                self.mount = "/" + (mount?.trim() ?? MountType.cubbyhole.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
     }
 }
 
-public extension Vault {
-    func buildCubbyholeClient(config: SecretEngines.CubbyholeClient.Config) -> SecretEngines.CubbyholeClient {
+public extension Vault.SecretEngines {
+    func buildCubbyholeClient(config: CubbyholeClient.Config) -> CubbyholeClient {
         .init(config: config, client: client)
     }
 }

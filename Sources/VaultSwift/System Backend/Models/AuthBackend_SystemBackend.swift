@@ -1,16 +1,16 @@
 import Foundation
 
 public extension Vault.SystemBackend {
-    struct AuthBackend: Codable, Sendable {
+    struct AuthBackend<Config: Codable & Sendable, Options: Codable & Sendable>: Codable, Sendable {
         public let type: Vault.AuthProviders.MethodType
         public let id: String?
         public let accessor: String?
-        public let config: [String: JSONAny]?
+        public let config: Config?
         public let externalEntropyAccess: Bool?
         public let description: String?
         public let deprecationStatus: Bool?
         public let local: Bool?
-        public let options: [String: JSONAny]?
+        public let options: Options?
         public let pluginName: String?
         public let pluginVersion: String?
         public let runningPluginVersion: String?
@@ -20,12 +20,12 @@ public extension Vault.SystemBackend {
         public init(type: Vault.AuthProviders.MethodType,
                     id: String?,
                     accessor: String?,
-                    config: [String: JSONAny]?,
+                    config: Config?,
                     description: String?,
                     deprecationStatus: Bool?,
                     externalEntropyAccess: Bool?,
                     local: Bool?,
-                    options: [String: JSONAny]?,
+                    options: Options?,
                     pluginName: String?,
                     pluginVersion: String?,
                     runningPluginVersion: String?,

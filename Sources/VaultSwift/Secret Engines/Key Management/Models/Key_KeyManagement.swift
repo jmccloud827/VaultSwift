@@ -1,9 +1,9 @@
 import Foundation
 
 public extension Vault.SecretEngines.KeyManagementClient {
-    struct Key: Decodable, Sendable {
+    struct Key<T: Decodable & Sendable>: Decodable, Sendable {
         public let deletionAllowed: Bool?
-        public let keys: [String: [String: JSONAny]]?
+        public let keys: [String: T]?
         public let latestVersion: Int?
         public let minimumEnabledVersion: Int?
         public let name: String?

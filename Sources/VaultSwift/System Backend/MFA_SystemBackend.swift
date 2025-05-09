@@ -2,17 +2,13 @@ import Foundation
 
 public extension Vault.SystemBackend {
     struct MFAClient {
-        public let duoClient: DuoClient
-        public let oktaClient: OktaClient
-        public let pingIDClient: PingIDClient
-        public let totpClient: TOTPClient
+        public lazy var duoClient = DuoClient(client: client)
+        public lazy var oktaClient = OktaClient(client: client)
+        public lazy var pingIDClient = PingIDClient(client: client)
+        public lazy var totpClient = TOTPClient(client: client)
         private let client: Vault.Client
             
         init(client: Vault.Client) {
-            self.duoClient = .init(client: client)
-            self.oktaClient = .init(client: client)
-            self.pingIDClient = .init(client: client)
-            self.totpClient = .init(client: client)
             self.client = client
         }
         
@@ -26,15 +22,15 @@ public extension Vault.SystemBackend {
 }
 
 public extension Vault.SystemBackend.MFAClient.BaseClient {
-    func write(config: Config, forName name: String) async throws(VaultError) {
+    func write(config: Config, forName name: String) async throws {
         try await client.makeCall(path: basePath + "v1/sys/mfa/method/" + basePath + "/" + name.trim(), httpMethod: .post, request: config, wrapTimeToLive: nil)
     }
     
-    func getConfigFor(name: String) async throws(VaultError) -> VaultResponse<Config> {
+    func getConfigFor(name: String) async throws -> VaultResponse<Config> {
         try await client.makeCall(path: basePath + "v1/sys/mfa/method/" + basePath + "/" + name.trim(), httpMethod: .get, wrapTimeToLive: nil)
     }
     
-    func deleteConfigFor(name: String) async throws(VaultError) {
+    func deleteConfigFor(name: String) async throws {
         try await client.makeCall(path: basePath + "v1/sys/mfa/method/" + basePath + "/" + name.trim(), httpMethod: .delete, wrapTimeToLive: nil)
     }
 }

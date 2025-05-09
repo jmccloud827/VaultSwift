@@ -10,7 +10,7 @@ public extension Vault.SystemBackend {
         public let progress: Int?
         public let nonce: String?
         public let version: String?
-        public let buildDate: Date?
+        public let buildDate: String?
         public let migration: Bool?
         public let recoverySeal: Bool?
         public let storageType: String?
@@ -18,7 +18,7 @@ public extension Vault.SystemBackend {
         public let hcpLinkResourceID: String?
         public let warnings: [String]?
         public let highAvailabilityEnabled: Bool?
-        public let activeTime: Date?
+        public let activeTime: String?
         public let clusterName: String?
         public let clusterId: String?
 

@@ -3,7 +3,7 @@ import Foundation
 public extension Vault.SystemBackend {
     struct TokenWrapInfo: Decodable, Sendable {
         public let creationPath: String?
-        public let creationTime: Date?
+        public let creationTime: String?
         public let creationTimeToLive: Int?
 
         enum CodingKeys: String, CodingKey {

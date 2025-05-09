@@ -5,7 +5,7 @@ public extension Vault.SecretEngines {
         public let config: Config
         private let client: Vault.Client
             
-        public init(config: Config, vaultConfig: Vault.Config) {
+        public init(config: Config = .init(), vaultConfig: Vault.Config) {
             self.init(config: config, client: .init(config: vaultConfig))
         }
             
@@ -14,9 +14,9 @@ public extension Vault.SecretEngines {
             self.client = client
         }
         
-        public func getCredentialsFor(role: String, request: CredentialsRequest) async throws(VaultError) -> VaultResponse<CredentialsResponse> {
+        public func getCredentialsFor(role: String, request: CredentialsRequest) async throws -> VaultResponse<CredentialsResponse> {
             guard !role.isEmpty else {
-                throw .init(error: "Key must not be empty")
+                throw VaultError(error: "Role must not be empty")
             }
             
             return try await client.makeCall(path: config.mount + "/creds/" + role.trim(), httpMethod: .post, request: request, wrapTimeToLive: config.wrapTimeToLive)
@@ -27,15 +27,15 @@ public extension Vault.SecretEngines {
             public let wrapTimeToLive: String?
                 
             public init(mount: String? = nil, wrapTimeToLive: String? = nil) {
-                self.mount = "/" + (mount ?? MountType.kubernetes.rawValue)
+                self.mount = "/" + (mount?.trim() ?? MountType.kubernetes.rawValue)
                 self.wrapTimeToLive = wrapTimeToLive
             }
         }
     }
 }
 
-public extension Vault {
-    func buildKubernetesClient(config: SecretEngines.KubernetesClient.Config) -> SecretEngines.KubernetesClient {
+public extension Vault.SecretEngines {
+    func buildKubernetesClient(config: KubernetesClient.Config) -> KubernetesClient {
         .init(config: config, client: client)
     }
 }

@@ -11,52 +11,43 @@ public extension Vault {
         enum HTTPMethod: String {
             case get = "GET"
             case post = "POST"
-            case head = "HEAD"
             case put = "PUT"
             case delete = "DELETE"
-            case options = "OPTIONS"
-            case trace = "TRACE"
             case patch = "PATCH"
             case list = "LIST"
         }
         
-        func makeCall(path: String, httpMethod: HTTPMethod, wrapTimeToLive: String?) async throws(VaultError) {
+        func makeCall(path: String, httpMethod: HTTPMethod, wrapTimeToLive: String?) async throws {
             _ = try await self.makeCall(path: path, httpMethod: httpMethod, requestData: nil, wrapTimeToLive: wrapTimeToLive)
         }
         
-        func makeCall(path: String, httpMethod: HTTPMethod, request: some Encodable, wrapTimeToLive: String?) async throws(VaultError) {
-            guard let requestData = try? JSONEncoder().encode(request) else {
-                throw .init(error: "JSON encode error")
-            }
+        func makeCall(path: String, httpMethod: HTTPMethod, request: some Encodable, wrapTimeToLive: String?) async throws {
+            let requestData = try JSONEncoder().encode(request)
             
             _ = try await self.makeCall(path: path, httpMethod: httpMethod, requestData: requestData, wrapTimeToLive: wrapTimeToLive)
         }
         
-        func makeCall<T: Decodable>(path: String, httpMethod: HTTPMethod, wrapTimeToLive: String?) async throws(VaultError) -> T {
+        func makeCall<T: Decodable>(path: String, httpMethod: HTTPMethod, wrapTimeToLive: String?) async throws -> T {
             try await self.makeCall(path: path, httpMethod: httpMethod, requestData: nil, wrapTimeToLive: wrapTimeToLive)
         }
         
-        func makeCall<T: Decodable>(path: String, httpMethod: HTTPMethod, request: some Encodable, wrapTimeToLive: String?) async throws(VaultError) -> T {
-            guard let requestData = try? JSONEncoder().encode(request) else {
-                throw .init(error: "JSON encode error")
-            }
+        func makeCall<T: Decodable>(path: String, httpMethod: HTTPMethod, request: some Encodable, wrapTimeToLive: String?) async throws -> T {
+            let requestData = try JSONEncoder().encode(request)
             
             return try await self.makeCall(path: path, httpMethod: httpMethod, requestData: requestData, wrapTimeToLive: wrapTimeToLive)
         }
         
-        private func makeCall<T: Decodable>(path: String, httpMethod: HTTPMethod, requestData: Data?, wrapTimeToLive: String?) async throws(VaultError) -> T {
+        private func makeCall<T: Decodable>(path: String, httpMethod: HTTPMethod, requestData: Data?, wrapTimeToLive: String?) async throws -> T {
             let responseData = try await self.makeCall(path: path, httpMethod: httpMethod, requestData: requestData, wrapTimeToLive: wrapTimeToLive)
             
-            guard let response = try? JSONDecoder().decode(T.self, from: responseData) else {
-                throw VaultError(error: "JSON decode error\nResponse\n\(String(data: responseData, encoding: .utf8) ?? "")")
-            }
+            let response = try JSONDecoder().decode(T.self, from: responseData)
             
             return response
         }
         
-        private func makeCall(path: String, httpMethod: HTTPMethod, requestData: Data?, wrapTimeToLive: String?) async throws(VaultError) -> Data {
+        private func makeCall(path: String, httpMethod: HTTPMethod, requestData: Data?, wrapTimeToLive: String?) async throws -> Data {
             guard let url = URL(string: "\(config.baseURI)/v1\(path)") else {
-                throw .init(error: "Tried to build an invalid URL")
+                throw VaultError(error: "Tried to build an invalid URL")
             }
             
             var urlRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
@@ -85,23 +76,17 @@ public extension Vault {
             
             urlRequest.addValue("true", forHTTPHeaderField: "X-Vault-Request")
             
-            do {
-                let (response, urlResponse) = try await URLSession.shared.data(for: urlRequest, delegate: TrustAllCertsDelegate())
-                
-                guard let urlResponse = urlResponse as? HTTPURLResponse else {
-                    throw VaultError(error: "Server gave a non-HTTP Response")
-                }
-                
-                guard urlResponse.statusCode >= 200 && urlResponse.statusCode < 300 else {
-                    throw VaultError(error: "Server returned a non-2xx status code: \(urlResponse.statusCode)", statusCode: urlResponse.statusCode)
-                }
-                
-                return response
-            } catch let error as VaultError {
-                throw .init(error: error.localizedDescription + "\nURL: \(url)\nRequest:\n\(String(data: requestData ?? Data(), encoding: .utf8) ?? "")", statusCode: error.statusCode)
-            } catch {
-                throw .init(error: error.localizedDescription)
+            let (response, urlResponse) = try await URLSession.shared.data(for: urlRequest, delegate: TrustAllCertsDelegate())
+            
+            guard let urlResponse = urlResponse as? HTTPURLResponse else {
+                throw VaultError(error: "Server gave a non-HTTP Response")
             }
+            
+            guard urlResponse.statusCode >= 200 && urlResponse.statusCode < 300 else {
+                throw VaultError(error: "Server returned a non-2xx status code (\(urlResponse.statusCode))" + " for URL: \(url)", statusCode: urlResponse.statusCode)
+            }
+            
+            return response
         }
     }
 }
