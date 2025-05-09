@@ -9,11 +9,11 @@ public extension Vault.AuthProviders.AliCloudClient {
         public let period: String?
 
         enum CodingKeys: String, CodingKey {
-            case arn = "arn"
-            case policies = "policies"
+            case arn
+            case policies
             case timeToLive = "ttl"
             case maximumTimeToLive = "max_ttl"
-            case period = "period"
+            case period
         }
     }
 }

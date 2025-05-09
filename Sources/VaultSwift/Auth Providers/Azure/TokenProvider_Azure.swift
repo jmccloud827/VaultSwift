@@ -1,13 +1,21 @@
 import Foundation
 
 extension Vault.AuthProviders {
+    /// A token provider for the Azure authentication method.
     struct AzureTokenProvider: TokenProvider {
         let request: AzureAuthRequest
         let mount: String?
         let client: Vault.Client
         
+        /// Retrieves a token using the Azure authentication method.
+        ///
+        /// - Returns: A token string.
+        /// - Throws: An error if the request fails or the token cannot be located.
         func getToken() async throws -> String {
-            let response: VaultResponse<JSONAny> = try await client.makeCall(path: "v1/auth/\(mount?.trim() ?? MethodType.azure.rawValue)/login", httpMethod: .post, request: request, wrapTimeToLive: nil)
+            let response: VaultResponse<JSONAny> = try await client.makeCall(path: "v1/auth/\(mount?.trim() ?? MethodType.azure.rawValue)/login",
+                                                                             httpMethod: .post,
+                                                                             request: request,
+                                                                             wrapTimeToLive: nil)
             
             guard let auth = response.auth else {
                 throw VaultError(error: "Unable to locate token")
@@ -17,6 +25,7 @@ extension Vault.AuthProviders {
         }
     }
     
+    /// A request structure for Azure authentication.
     public struct AzureAuthRequest: Encodable {
         public let role: String
         public let jwt: String
@@ -26,6 +35,16 @@ extension Vault.AuthProviders {
         public let virtualMachineScaleSetName: String?
         public let resourceID: String?
         
+        /// Initializes a new `AzureAuthRequest` instance.
+        ///
+        /// - Parameters:
+        ///   - role: The role for the Azure authentication.
+        ///   - jwt: The JSON Web Token (JWT) for the Azure authentication.
+        ///   - subscriptionID: The Azure subscription ID (optional).
+        ///   - resourceGroupName: The resource group name (optional).
+        ///   - virtualMachineName: The virtual machine name (optional).
+        ///   - virtualMachineScaleSetName: The virtual machine scale set name (optional).
+        ///   - resourceID: The resource ID (optional).
         public init(role: String,
                     jwt: String,
                     subscriptionID: String? = nil,

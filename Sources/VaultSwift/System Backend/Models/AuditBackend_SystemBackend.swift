@@ -72,8 +72,10 @@ public extension Vault.SystemBackend {
                 switch self {
                 case .file:
                     Self.fileTypeString
+                    
                 case .syslog:
                     Self.syslogTypeString
+                    
                 case let .custom(type, _):
                     type
                 }

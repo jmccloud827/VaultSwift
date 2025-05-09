@@ -18,10 +18,10 @@ public extension Vault.SecretEngines.PKIClient {
             case tidyCertStore = "tidy_cert_store"
             case tidyRevokedCerts = "tidy_revoked_certs"
             case tidyState = "state"
-            case error = "error"
+            case error
             case timeStarted = "time_started"
             case timeFinished = "time_finished"
-            case message = "message"
+            case message
             case certStoreDeletedCount = "cert_store_deleted_count"
             case revokedCertDeletedCount = "revoked_cert_deleted_count"
         }

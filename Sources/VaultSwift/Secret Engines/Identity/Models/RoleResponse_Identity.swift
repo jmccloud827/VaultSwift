@@ -11,13 +11,13 @@ public extension Vault.SecretEngines.IdentityClient {
         public struct Data: Decodable, Sendable {
             public let key: String?
             public let template: String?
-            public let clientId: String?
+            public let clientID: String?
             public let timeToLive: String?
             
             enum CodingKeys: String, CodingKey {
                 case key
                 case template
-                case clientId = "client_id"
+                case clientID = "client_id"
                 case timeToLive = "ttl"
             }
         }

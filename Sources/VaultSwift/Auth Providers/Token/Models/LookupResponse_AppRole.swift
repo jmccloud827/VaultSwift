@@ -7,9 +7,9 @@ public extension Vault.AuthProviders.TokenClient {
         public let renewable: Bool?
 
         enum CodingKeys: String, CodingKey {
-            case accessor = "accessor"
+            case accessor
             case explicitMaximumTimeToLive = "explicit_max_ttl"
-            case renewable = "renewable"
+            case renewable
         }
     }
 }

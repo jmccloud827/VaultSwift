@@ -1,10 +1,12 @@
 import Foundation
 
 public extension Vault.SystemBackend.MFAClient {
+    /// A client for interacting with PingID MFA in a Vault instance.
     struct PingIDClient: BaseClient {
         public let basePath = "pingid"
         public let client: Vault.Client
         
+        /// A structure representing the configuration for PingID MFA.
         public struct Config: Codable, Sendable {
             public let mountAccessor: String?
             public let id: String?
@@ -16,6 +18,18 @@ public extension Vault.SystemBackend.MFAClient {
             public let authenticatorURL: String?
             public let orgAlias: String?
             
+            /// Initializes a new instance of `Config`.
+            ///
+            /// - Parameters:
+            ///   - mountAccessor: The accessor for the mount point.
+            ///   - id: The identifier for the PingID configuration.
+            ///   - usernameFormat: The format for the username.
+            ///   - base64SettingsFile: The settings file encoded in base64 format.
+            ///   - useSignature: A boolean indicating whether to use a signature.
+            ///   - idpURL: The URL for the identity provider (IDP).
+            ///   - adminURL: The URL for the admin interface.
+            ///   - authenticatorURL: The URL for the authenticator.
+            ///   - orgAlias: The alias for the organization.
             public init(mountAccessor: String?,
                         id: String?,
                         usernameFormat: String?,

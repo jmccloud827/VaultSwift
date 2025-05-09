@@ -8,7 +8,7 @@ public extension Vault.SecretEngines.IdentityClient {
         
         enum CodingKeys: String, CodingKey {
             case clientID = "client_id"
-            case token = "token"
+            case token
             case timeToLive = "ttl"
         }
     }

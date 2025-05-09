@@ -1,13 +1,21 @@
 import Foundation
 
 extension Vault.AuthProviders {
+    /// A token provider for the Okta authentication method.
     struct OktaTokenProvider: TokenProvider {
         let request: OktaAuthRequest
         let mount: String?
         let client: Vault.Client
         
+        /// Retrieves a token using the Okta authentication method.
+        ///
+        /// - Returns: A token string.
+        /// - Throws: An error if the request fails or the token cannot be located.
         func getToken() async throws -> String {
-            let response: VaultResponse<JSONAny> = try await client.makeCall(path: "/auth/\(mount?.trim() ?? MethodType.okta.rawValue)/login/\(request.username)", httpMethod: .post, request: request, wrapTimeToLive: nil)
+            let response: VaultResponse<JSONAny> = try await client.makeCall(path: "/auth/\(mount?.trim() ?? MethodType.okta.rawValue)/login/\(request.username)",
+                                                                             httpMethod: .post,
+                                                                             request: request,
+                                                                             wrapTimeToLive: nil)
             
             guard let auth = response.auth else {
                 throw VaultError(error: "Unable to locate token")
@@ -17,6 +25,7 @@ extension Vault.AuthProviders {
         }
     }
     
+    /// A request structure for Okta authentication.
     public struct OktaAuthRequest: Encodable {
         public let username: String
         public let password: String
@@ -24,6 +33,14 @@ extension Vault.AuthProviders {
         public let totpProvider: TOTPProvider?
         public let nonce: String?
         
+        /// Initializes a new `OktaAuthRequest` instance.
+        ///
+        /// - Parameters:
+        ///   - username: The username for the Okta account.
+        ///   - password: The password for the Okta account.
+        ///   - totp: The Time-based One-Time Password (optional).
+        ///   - totpProvider: The provider for the TOTP (optional).
+        ///   - nonce: The nonce value (optional).
         public init(username: String, password: String, totp: String? = nil, totpProvider: TOTPProvider? = nil, nonce: String? = nil) {
             self.username = username
             self.password = password
@@ -32,6 +49,7 @@ extension Vault.AuthProviders {
             self.nonce = nonce
         }
         
+        /// Enumeration of TOTP providers.
         public enum TOTPProvider: Int {
             case okta
             case google

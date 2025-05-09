@@ -9,7 +9,7 @@ public extension Vault.SecretEngines.ActiveDirectoryClient {
         enum CodingKeys: String, CodingKey {
             case currentPassword = "current_password"
             case lastPassword = "last_password"
-            case username = "username"
+            case username
         }
     }
 }

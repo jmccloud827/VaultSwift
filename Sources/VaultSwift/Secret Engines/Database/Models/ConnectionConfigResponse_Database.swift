@@ -19,12 +19,12 @@ public extension Vault.SecretEngines.DatabaseClient {
         }
         
         public struct ConnectionDetailsModel: Decodable, Sendable {
-            public let connectionUrl: String?
+            public let connectionURL: String?
             public let username: String?
 
             enum CodingKeys: String, CodingKey {
-                case connectionUrl = "connection_url"
-                case username = "username"
+                case connectionURL = "connection_url"
+                case username
             }
         }
     }

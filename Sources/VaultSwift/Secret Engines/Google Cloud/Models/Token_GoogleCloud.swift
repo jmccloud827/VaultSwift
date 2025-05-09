@@ -7,7 +7,7 @@ public extension Vault.SecretEngines.GoogleCloudClient {
         public let tokenTimeToLive: Int
         
         enum CodingKeys: String, CodingKey {
-            case token = "token"
+            case token
             case expiresAtSeconds = "expires_at_seconds"
             case tokenTimeToLive = "token_ttl"
         }

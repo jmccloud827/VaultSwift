@@ -2,19 +2,19 @@ import Foundation
 
 public extension Vault.SecretEngines.IdentityClient {
     struct MergeEntitiesRequest: Encodable, Sendable {
-        public let fromEntityIds: [String]
-        public let toEntityId: String
+        public let fromEntityIDs: [String]
+        public let toEntityID: String
         public let force: Bool
         
-        public init(fromEntityIds: [String], toEntityId: String, force: Bool) {
-            self.fromEntityIds = fromEntityIds
-            self.toEntityId = toEntityId
+        public init(fromEntityIDs: [String], toEntityID: String, force: Bool) {
+            self.fromEntityIDs = fromEntityIDs
+            self.toEntityID = toEntityID
             self.force = force
         }
         
         enum CodingKeys: String, CodingKey {
-            case fromEntityIds = "from_entity_ids"
-            case toEntityId = "to_entity_id"
+            case fromEntityIDs = "from_entity_ids"
+            case toEntityID = "to_entity_id"
             case force
         }
     }

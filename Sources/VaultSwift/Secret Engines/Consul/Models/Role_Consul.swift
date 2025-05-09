@@ -73,8 +73,8 @@ public extension Vault.SecretEngines.ConsulClient {
             case consulNamespace = "consul_namespace"
             case base64EncodedACLConsulPolicies = "consul_policies"
             case consulRoles = "consul_roles"
-            case lease = "lease"
-            case local = "local"
+            case lease
+            case local
             case maximumTimeToLive = "max_ttl"
             case nodeIdentities = "node_identities"
             case consulAdminPartition = "partition"

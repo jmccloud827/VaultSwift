@@ -1,5 +1,6 @@
 import Foundation
 
+/// A structure representing a response from Vault.
 public struct VaultResponse<T: Decodable & Sendable>: Decodable {
     public let requestID: String
     public let leaseID: String
@@ -23,6 +24,7 @@ public struct VaultResponse<T: Decodable & Sendable>: Decodable {
         case mountType = "mount_type"
     }
     
+    /// A structure representing wrap information.
     public struct WrapInfo: Decodable, Sendable {
         public let token: String
         public let timeToLive: Int
@@ -39,6 +41,7 @@ public struct VaultResponse<T: Decodable & Sendable>: Decodable {
         }
     }
     
+    /// A structure representing authentication information.
     public struct Auth: Decodable, Sendable {
         public let clientToken: String
         public let accessor: String

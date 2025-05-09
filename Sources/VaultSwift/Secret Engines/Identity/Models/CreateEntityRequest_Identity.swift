@@ -8,7 +8,7 @@ public extension Vault.SecretEngines.IdentityClient {
         public let policies: [String]?
         public let disabled: Bool
         
-        public init(id: String?, name: String?, metadata: [String : String]?, policies: [String]?, disabled: Bool) {
+        public init(id: String?, name: String?, metadata: [String: String]?, policies: [String]?, disabled: Bool) {
             self.id = id
             self.name = name
             self.metadata = metadata

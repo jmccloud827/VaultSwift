@@ -28,7 +28,7 @@ public extension Vault.SecretEngines.AWSClient {
         enum CodingKeys: String, CodingKey {
             case maxRetries = "max_retries"
             case accessKey = "access_key"
-            case region = "region"
+            case region
             case iamEndpoint = "iam_endpoint"
             case stsEndpoint = "sts_endpoint"
             case usernameTemplate = "username_template"

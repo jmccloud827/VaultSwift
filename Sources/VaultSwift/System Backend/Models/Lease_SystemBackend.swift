@@ -10,11 +10,11 @@ public extension Vault.SystemBackend {
         public let timeToLive: Int?
 
         enum CodingKeys: String, CodingKey {
-            case id = "id"
+            case id
             case issueTime = "issue_time"
             case expiryTime = "expire_time"
             case lastRenewalTime = "last_renewal_time"
-            case renewable = "renewable"
+            case renewable
             case timeToLive = "ttl"
         }
     }

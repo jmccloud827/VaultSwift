@@ -1,5 +1,6 @@
 import Foundation
 
+/// An enum representing any JSON value.
 public enum JSONAny: Codable, Sendable {
     case string(String)
     case number(Float)
@@ -52,18 +53,30 @@ public enum JSONAny: Codable, Sendable {
         }
     }
     
+    /// Converts the `JSONAny` value to an object of the specified type.
+    ///
+    /// - Returns: An object of the specified type.
+    /// - Throws: An error if any value throws an error during decoding.
     public func toObject<T: Decodable & Sendable>() throws -> T {
-        return try self.fromJSONAny()
+        try self.fromJSONAny()
     }
 }
 
 public extension Encodable {
+    /// Converts the encodable value to an object of the specified type.
+    ///
+    /// - Returns: An object of the specified type.
+    /// - Throws: An error if any value throws an error during encoding or decoding.
     func fromJSONAny<T: Decodable & Sendable>() throws -> T {
         let jsonData = try JSONEncoder().encode(self)
         
         return try JSONDecoder().decode(T.self, from: jsonData)
     }
     
+    /// Converts the encodable value to a `JSONAny` value.
+    ///
+    /// - Returns: A `JSONAny` value.
+    /// - Throws: An error if any value throws an error during encoding or decoding.
     func toJSONAny() throws -> JSONAny {
         let jsonData = try JSONEncoder().encode(self)
         

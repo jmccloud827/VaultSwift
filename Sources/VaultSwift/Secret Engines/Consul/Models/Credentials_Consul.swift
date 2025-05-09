@@ -5,7 +5,7 @@ public extension Vault.SecretEngines.ConsulClient {
         public let token: String
         
         enum CodingKeys: String, CodingKey {
-            case token = "token"
+            case token
         }
     }
 }

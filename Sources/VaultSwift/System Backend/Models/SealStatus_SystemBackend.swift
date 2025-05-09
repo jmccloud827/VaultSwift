@@ -20,28 +20,28 @@ public extension Vault.SystemBackend {
         public let highAvailabilityEnabled: Bool?
         public let activeTime: String?
         public let clusterName: String?
-        public let clusterId: String?
+        public let clusterID: String?
 
         enum CodingKeys: String, CodingKey {
-            case type = "type"
-            case initialized = "initialized"
-            case sealed = "sealed"
+            case type
+            case initialized
+            case sealed
             case secretThreshold = "t"
             case secretShares = "n"
-            case progress = "progress"
-            case nonce = "nonce"
-            case version = "version"
+            case progress
+            case nonce
+            case version
             case buildDate = "build_date"
-            case migration = "migration"
+            case migration
             case recoverySeal = "recovery_seal"
             case storageType = "storage_type"
             case hcpLinkStatus = "hcp_link_status"
             case hcpLinkResourceID = "hcp_link_resource_ID"
-            case warnings = "warnings"
+            case warnings
             case highAvailabilityEnabled = "ha_enabled"
             case activeTime = "active_time"
             case clusterName = "cluster_name"
-            case clusterId = "cluster_id"
+            case clusterID = "cluster_id"
         }
     }
 }

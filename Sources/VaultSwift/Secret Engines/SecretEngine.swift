@@ -1,13 +1,18 @@
 import Foundation
 
 public extension Vault {
+    /// A structure representing the Secret Engines in Vault.
     struct SecretEngines {
         let client: Vault.Client
         
+        /// Initializes a new `SecretEngines` instance.
+        ///
+        /// - Parameter client: The `Vault.Client` instance to use for making requests.
         init(client: Vault.Client) {
             self.client = client
         }
         
+        /// Enumeration representing the different types of mountable secret engines.
         public enum MountType: Codable, Sendable {
             case activeDirectory
             case aliCloud
@@ -36,6 +41,7 @@ public extension Vault {
             case transit
             case unknown(String)
             
+            /// The raw string value of the mount type.
             public var rawValue: String {
                 switch self {
                 case .activeDirectory:
@@ -112,6 +118,7 @@ public extension Vault {
                     
                 case .transit:
                     "transit"
+
                 case let .unknown(value):
                     value
                 }
@@ -147,7 +154,7 @@ public extension Vault {
             
             public init(from decoder: any Decoder) throws {
                 let type = try decoder.singleValueContainer().decode(String.self)
-                self = Self.allCases.first(where: { $0.rawValue == type }) ?? .unknown(type)
+                self = Self.allCases.first { $0.rawValue == type } ?? .unknown(type)
             }
             
             public func encode(to encoder: any Encoder) throws {

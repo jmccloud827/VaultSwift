@@ -9,7 +9,7 @@ public extension Vault.SecretEngines.AliCloudClient {
         
         enum CodingKeys: String, CodingKey {
             case accessKey = "access_key"
-            case expiration = "expiration"
+            case expiration
             case secretKey = "secret_key"
             case securityToken = "security_token"
         }

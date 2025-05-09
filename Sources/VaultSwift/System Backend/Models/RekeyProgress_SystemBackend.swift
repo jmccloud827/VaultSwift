@@ -10,12 +10,12 @@ public extension Vault.SystemBackend {
         public let backup: Bool?
 
         enum CodingKeys: String, CodingKey {
-            case nonce = "nonce"
-            case complete = "complete"
+            case nonce
+            case complete
             case masterKeys = "keys"
             case base64MasterKeys = "keys_base64"
             case pgpFingerprints = "pgp_fingerprints"
-            case backup = "backup"
+            case backup
         }
     }
 }

@@ -17,7 +17,7 @@ public extension Vault.AuthProviders.AppRoleClient {
         }
 
         enum CodingKeys: String, CodingKey {
-            case metadata = "metadata"
+            case metadata
             case cidrList = "cidr_list"
             case tokenBoundCIDRs = "token_bound_cidrs"
             case numberOfUses = "num_uses"

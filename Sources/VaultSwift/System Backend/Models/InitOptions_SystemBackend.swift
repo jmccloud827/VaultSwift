@@ -12,13 +12,13 @@ public extension Vault.SystemBackend {
         public let recoveryPGPKeys: [String]?
         
         public init(pgpKeys: [String]?,
-                   rootTokenPGPKey: String?,
-                   secretShares: Int?,
-                   secretThreshold: Int?,
-                   storedShares: Int?,
-                   recoveryShares: Int?,
-                   recoveryThreshold: Int?,
-                   recoveryPGPKeys: [String]?) {
+                    rootTokenPGPKey: String?,
+                    secretShares: Int?,
+                    secretThreshold: Int?,
+                    storedShares: Int?,
+                    recoveryShares: Int?,
+                    recoveryThreshold: Int?,
+                    recoveryPGPKeys: [String]?) {
             self.pgpKeys = pgpKeys
             self.rootTokenPGPKey = rootTokenPGPKey
             self.secretShares = secretShares

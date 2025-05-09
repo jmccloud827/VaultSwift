@@ -1,12 +1,17 @@
 import Foundation
 
 extension Vault.AuthProviders {
+    /// A token provider for the user credentials authentication method.
     struct UserCredentialsTokenProvider: TokenProvider {
         let username: String
         let password: String
         let mount: String?
         let client: Vault.Client
         
+        /// Retrieves a token using the user credentials.
+        ///
+        /// - Returns: A token string.
+        /// - Throws: An error if the request fails or the token cannot be located.
         func getToken() async throws -> String {
             let request = ["password": password]
             
