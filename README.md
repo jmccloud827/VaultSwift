@@ -1,4 +1,4 @@
-# KeychainManager
+# VaultSwift
 
 `VaultSwift` is a Swift package based off [`VaultSharp`](https://github.com/rajanadar/VaultSharp.git). It provides a developer friendly implementation of Hashicorp's Vault Service.
 
